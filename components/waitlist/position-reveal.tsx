@@ -48,14 +48,14 @@ export function PositionReveal({
         initial={reduce ? false : { scale: 0.92, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="font-display text-[56px] font-bold leading-none tracking-[-0.03em] text-brand-blue sm:text-[64px]"
+        className="font-display text-[64px] font-extrabold leading-none tracking-[-0.03em] text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-white sm:text-[76px] drop-shadow-[0_2px_15px_rgba(30,220,255,0.3)]"
         style={{ fontVariantNumeric: "tabular-nums" }}
       >
-        <span className="text-text-muted">{prefix}</span>
+        <span className="text-white/40 font-bold mr-1">{prefix}</span>
         <motion.span>{display}</motion.span>
       </motion.p>
       {label && (
-        <p className="mt-2 text-[15px] text-text-secondary">{label}</p>
+        <p className="mt-3 text-[12px] font-semibold uppercase tracking-wider text-white/60">{label}</p>
       )}
     </div>
   );

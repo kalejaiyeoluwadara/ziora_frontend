@@ -14,12 +14,12 @@ export function LeaderboardPodium({ entries }: LeaderboardPodiumProps) {
   return (
     <div className="grid grid-cols-3 gap-3 md:gap-6 items-end pt-4">
       {/* Rank 2 - Silver podium */}
-      <div className="relative bg-[#080b18]/90 border border-brand-blue-light/20 rounded-2xl p-3 md:p-5 text-center flex flex-col items-center h-[180px] md:h-[220px] justify-between shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-all hover:translate-y-[-2px] duration-200">
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-800 border border-slate-700 text-slate-300 rounded-full w-6 h-6 flex items-center justify-center text-xs font-black font-mono shadow-md">
+      <div className="relative bg-[#080b18]/90 border border-brand-blue-light/20 rounded-2xl p-3 md:p-5 text-center flex flex-col items-center h-[180px] md:h-[220px] justify-between transition-all hover:translate-y-[-2px] duration-200">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-800 border border-slate-700 text-slate-300 rounded-full w-6 h-6 flex items-center justify-center text-xs font-black font-mono">
           2
         </div>
         <div className="mt-2">
-          <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 border-2 border-slate-500 flex items-center justify-center font-bold text-slate-200 text-sm md:text-lg shadow-inner">
+          <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 border-2 border-slate-500 flex items-center justify-center font-bold text-slate-200 text-sm md:text-lg">
             {rank2.displayName.substring(0, 2).toUpperCase()}
           </div>
         </div>
@@ -37,13 +37,13 @@ export function LeaderboardPodium({ entries }: LeaderboardPodiumProps) {
       </div>
 
       {/* Rank 1 - Champion podium (glowing neon orange/gold) */}
-      <div className="relative bg-[#0e101d]/90 border border-[#FF8A00]/30 rounded-2xl p-3 md:p-6 text-center flex flex-col items-center h-[200px] md:h-[250px] justify-between shadow-[0_4px_40px_rgba(0,0,0,0.6)] animate-glow-orange transition-all hover:translate-y-[-4px] duration-200 z-10 scale-105">
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-black font-mono shadow-[0_0_15px_rgba(255,107,0,0.5)] border border-[#ff8a00]/40">
+      <div className="relative bg-[#0e101d]/90 border border-[#FF8A00]/30 rounded-2xl p-3 md:p-6 text-center flex flex-col items-center h-[200px] md:h-[250px] justify-between animate-glow-orange transition-all hover:translate-y-[-4px] duration-200 z-10 scale-105">
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-black font-mono border border-[#ff8a00]/40">
           👑
         </div>
         <div className="mt-2 relative">
           <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#FF6B00] to-[#FF8A00] opacity-40 blur-sm animate-pulse" />
-          <div className="relative w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-[#FF6B00] to-[#1c1106] border-2 border-[#FF8A00] flex items-center justify-center font-bold text-white text-base md:text-xl shadow-[0_0_10px_rgba(255,107,0,0.3)]">
+          <div className="relative w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-[#FF6B00] to-[#1c1106] border-2 border-[#FF8A00] flex items-center justify-center font-bold text-white text-base md:text-xl">
             {rank1.displayName.substring(0, 2).toUpperCase()}
           </div>
         </div>
@@ -51,7 +51,7 @@ export function LeaderboardPodium({ entries }: LeaderboardPodiumProps) {
           <h3 className="font-bold text-xs md:text-base text-white truncate max-w-[80px] md:max-w-none">
             {rank1.isCurrentUser ? "You" : rank1.displayName}
           </h3>
-          <span className="text-xs md:text-sm text-[#FF8A00] uppercase font-mono font-bold mt-0.5 block drop-shadow-[0_0_4px_rgba(255,138,0,0.3)]">
+          <span className="text-xs md:text-sm text-[#FF8A00] uppercase font-mono font-bold mt-0.5 block">
             {rank1.referralCount} invites
           </span>
         </div>
@@ -61,8 +61,8 @@ export function LeaderboardPodium({ entries }: LeaderboardPodiumProps) {
       </div>
 
       {/* Rank 3 - Bronze podium */}
-      <div className="relative bg-[#080b18]/90 border border-pink-500/20 rounded-2xl p-3 md:p-5 text-center flex flex-col items-center h-[170px] md:h-[210px] justify-between shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-all hover:translate-y-[-2px] duration-200">
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#3c1d28] border border-pink-900/40 text-pink-300 rounded-full w-6 h-6 flex items-center justify-center text-xs font-black font-mono shadow-md">
+      <div className="relative bg-[#080b18]/90 border border-pink-500/20 rounded-2xl p-3 md:p-5 text-center flex flex-col items-center h-[170px] md:h-[210px] justify-between transition-all hover:translate-y-[-2px] duration-200">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#3c1d28] border border-pink-900/40 text-pink-300 rounded-full w-6 h-6 flex items-center justify-center text-xs font-black font-mono">
           3
         </div>
         <div className="mt-2">

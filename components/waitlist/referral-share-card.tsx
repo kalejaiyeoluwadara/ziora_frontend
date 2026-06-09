@@ -57,16 +57,16 @@ export function ReferralShareCard({ code, className }: ReferralShareCardProps) {
 
   return (
     <div className={cn("w-full", className)}>
-      <p className="text-base font-semibold text-text-primary">
+      <p className="text-base font-semibold text-white">
         Move up the list
       </p>
-      <p className="mt-0.5 text-[14px] text-text-secondary">
+      <p className="mt-0.5 text-[14px] text-white/70">
         Invite friends who&apos;d shop here. Every signup climbs your rank.
       </p>
 
       {/* Link + copy */}
-      <div className="mt-3 flex items-center gap-2 rounded-xl border border-black/5 bg-bg-card p-1.5 pl-4">
-        <span className="flex-1 truncate text-sm font-medium text-text-primary">
+      <div className="mt-3 flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 p-1.5 pl-4 backdrop-blur-sm">
+        <span className="flex-1 truncate text-sm font-medium text-white/90">
           {displayUrl}
         </span>
         <button
@@ -74,10 +74,10 @@ export function ReferralShareCard({ code, className }: ReferralShareCardProps) {
           onClick={copyLink}
           aria-label="Copy referral link"
           className={cn(
-            "flex h-9 items-center gap-1.5 rounded-lg px-3 text-sm font-medium transition-colors",
+            "flex h-9 items-center gap-1.5 rounded-lg px-3 text-sm font-semibold transition-all duration-200 active:scale-95",
             copied
-              ? "bg-accent-success text-white"
-              : "bg-white text-brand-blue-dark hover:bg-[#E1E9FF]",
+              ? "bg-emerald-500 text-white"
+              : "bg-white text-brand-blue hover:bg-white/90 shadow-md shadow-black/5",
           )}
         >
           {copied ? (
@@ -101,7 +101,7 @@ export function ReferralShareCard({ code, className }: ReferralShareCardProps) {
           onClick={() =>
             window.dispatchEvent(new CustomEvent("referral_share"))
           }
-          className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#25D366] text-sm font-medium text-white transition-opacity hover:opacity-90"
+          className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#25D366] text-sm font-semibold text-white shadow-lg shadow-[#25D366]/10 transition-all hover:bg-[#20ba59] active:scale-[0.98]"
         >
           <WhatsApp className="h-5 w-5" />
           WhatsApp
@@ -113,7 +113,7 @@ export function ReferralShareCard({ code, className }: ReferralShareCardProps) {
           onClick={() =>
             window.dispatchEvent(new CustomEvent("referral_share"))
           }
-          className="flex h-11 items-center justify-center gap-2 rounded-xl bg-text-primary text-sm font-medium text-white transition-opacity hover:opacity-90"
+          className="flex h-11 items-center justify-center gap-2 rounded-xl bg-white text-sm font-semibold text-black transition-all hover:bg-white/90 active:scale-[0.98] shadow-md shadow-black/5"
         >
           <XTwitter className="h-4 w-4" />
           Post
@@ -121,7 +121,7 @@ export function ReferralShareCard({ code, className }: ReferralShareCardProps) {
         <button
           type="button"
           onClick={nativeShare}
-          className="flex h-11 items-center justify-center gap-2 rounded-xl bg-bg-card text-sm font-medium text-brand-blue-dark transition-colors hover:bg-[#E1E9FF]"
+          className="flex h-11 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/10 text-sm font-semibold text-white transition-all hover:bg-white/15 active:scale-[0.98]"
         >
           <Share className="h-4 w-4" />
           Share

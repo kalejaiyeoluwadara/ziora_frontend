@@ -11,11 +11,11 @@ interface LeaderboardTableProps {
 const TOP_BADGE: Record<number, { label: string; className: string }> = {
   1: {
     label: "Founding Insider",
-    className: "bg-gradient-to-r from-accent-orange to-accent-deal text-white shadow-[0_0_10px_rgba(255,107,0,0.25)]",
+    className: "bg-gradient-to-r from-accent-orange to-accent-deal text-white",
   },
   2: {
     label: "Early Access",
-    className: "bg-brand-blue-light text-white shadow-[0_0_10px_rgba(30,91,255,0.25)]",
+    className: "bg-brand-blue-light text-white",
   },
   3: {
     label: "Priority Member",
@@ -31,7 +31,7 @@ export function LeaderboardTable({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-2xl border border-slate-900/80 bg-[#080b18]/70 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.5)]",
+        "overflow-hidden rounded-2xl border border-slate-900/80 bg-[#080b18]/70 backdrop-blur-md",
         className,
       )}
     >
@@ -70,7 +70,7 @@ export function LeaderboardTable({
                     className={cn(
                       "inline-flex h-7 min-w-7 items-center justify-center rounded-lg px-1.5 text-xs font-bold font-mono tracking-tight",
                       entry.rank === 1
-                        ? "bg-[#FF8A00] text-white shadow-[0_0_10px_rgba(255,138,0,0.3)]"
+                        ? "bg-[#FF8A00] text-white"
                         : entry.rank === 2
                         ? "bg-slate-300 text-slate-950"
                         : entry.rank === 3

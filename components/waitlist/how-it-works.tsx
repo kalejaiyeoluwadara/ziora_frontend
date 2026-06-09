@@ -30,7 +30,7 @@ function Step2Visual() {
       <div className="relative overflow-hidden rounded-xl border border-black/5 bg-bg-section/60 p-4 transition-all duration-300 group-hover:border-brand-blue-light/10 group-hover:bg-bg-card/45">
         {/* Mock Copy Input */}
         <div className="flex items-center justify-between rounded-lg border border-black/5 bg-white p-2 text-[11px] text-text-secondary">
-          <span className="font-mono text-text-muted">ziora.app/r/kemi</span>
+          <span className="font-mono text-text-muted">ziora.app/join?ref=kemi</span>
           <span className="flex items-center gap-1 text-[10px] font-semibold text-brand-blue-light">
             <Copy className="h-3 w-3" />
             <span className="group-hover:hidden">Copy</span>

@@ -7,7 +7,7 @@ interface LeaderboardMilestonesProps {
 
 export function LeaderboardMilestones({ userCount }: LeaderboardMilestonesProps) {
   return (
-    <section className="mb-10 bg-[#0a0c1a]/95 border border-slate-900 rounded-2xl p-6 shadow-[0_4px_25px_rgba(0,0,0,0.5)]">
+    <section className="mb-10 bg-[#0a0c1a]/95 border border-slate-900 rounded-2xl p-6">
       <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2 mb-6">
         <span className="flex items-center justify-center w-5 h-5 rounded bg-brand-blue-light/10 border border-brand-blue-light/40 text-[10px] text-[#00F0FF] font-black font-mono">
           ⚡

@@ -1,7 +1,7 @@
 import { SITE_URL } from "@/lib/api/client";
 
 export function referralUrl(code: string): string {
-  return `${SITE_URL.replace(/\/$/, "")}/r/${code}`;
+  return `${SITE_URL.replace(/\/$/, "")}/join?ref=${code}`;
 }
 
 const SHARE_MESSAGE =
