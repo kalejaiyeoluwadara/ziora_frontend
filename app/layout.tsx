@@ -15,10 +15,28 @@ const plusJakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ziora.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Ziora — Shop verified sellers in Lagos | Join the waitlist",
   description:
     "Join the Ziora waitlist for early access to Nigeria's trusted multi-vendor marketplace. Secure Paystack payments. Verified vendors. Lagos-first delivery.",
+  openGraph: {
+    title: "I'm on the Ziora waitlist",
+    description: "Verified sellers. Secure checkout. Join early access.",
+    url: siteUrl,
+    siteName: "Ziora",
+    images: [{ url: "/og/waitlist-og.png", width: 1200, height: 630 }],
+    locale: "en_NG",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "I'm on the Ziora waitlist",
+    description: "Verified sellers. Secure checkout. Join early access.",
+    images: ["/og/waitlist-og.png"],
+  },
 };
 
 export default function RootLayout({
