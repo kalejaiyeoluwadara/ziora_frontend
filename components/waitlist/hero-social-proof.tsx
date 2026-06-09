@@ -82,7 +82,7 @@ export function HeroSocialProof({ className }: HeroSocialProofProps) {
             </AnimatePresence>
           </div>
 
-          <p className="mt-1 text-[13px] font-medium text-white/70">
+          <p className="mt-0 text-[13px] font-medium text-white/70">
             <SubscriberCount variant="compact" />
           </p>
         </div>
