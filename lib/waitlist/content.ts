@@ -36,7 +36,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     question: "Is it free to join the waitlist?",
     answer:
-      "Yes. Joining is completely free and takes a few seconds. We'll only email you about your early access — no spam, ever.",
+      "Yes. Joining is completely free and takes a few seconds. We'll only email you about your early access, no spam, ever.",
   },
   {
     question: "How do I get early access?",

@@ -24,12 +24,21 @@ export function Typewriter({
   const isInView = useInView(containerRef, { once: true, margin: "-60px" });
   const reduceMotion = useReducedMotion();
 
+  const onCompleteRef = useRef(onComplete);
+  
+  // Keep ref updated with latest callback
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
   useEffect(() => {
     if (reduceMotion) {
-      setDisplayedText(text);
-      setIsComplete(true);
-      onComplete?.();
-      return;
+      const frameId = requestAnimationFrame(() => {
+        setDisplayedText(text);
+        setIsComplete(true);
+        onCompleteRef.current?.();
+      });
+      return () => cancelAnimationFrame(frameId);
     }
 
     if (!isInView) return;
@@ -38,14 +47,18 @@ export function Typewriter({
     let index = 0;
 
     const startTyping = () => {
+      setDisplayedText("");
+      setIsComplete(false);
+      
       const type = () => {
         if (index < text.length) {
-          setDisplayedText((prev) => prev + text.charAt(index));
+          const nextChar = text.charAt(index);
+          setDisplayedText((prev) => prev + nextChar);
           index++;
           timeoutId = setTimeout(type, speed);
         } else {
           setIsComplete(true);
-          onComplete?.();
+          onCompleteRef.current?.();
         }
       };
       type();
@@ -56,7 +69,7 @@ export function Typewriter({
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [isInView, text, delay, speed, reduceMotion, onComplete]);
+  }, [isInView, text, delay, speed, reduceMotion]);
 
   return (
     <span ref={containerRef} className="relative">

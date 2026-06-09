@@ -1,8 +1,14 @@
+"use client";
+
+import { useState } from "react";
+import { motion } from "motion/react";
 import { SubscriberCount } from "./subscriber-count";
 import { Reveal } from "./reveal";
 import { Typewriter } from "./typewriter";
 
 export function SocialProof() {
+  const [isQuoteTyped, setIsQuoteTyped] = useState(false);
+
   return (
     <section className="bg-bg-section py-16 sm:py-24">
       <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
@@ -18,15 +24,21 @@ export function SocialProof() {
                 text="We're building the marketplace Nigerians deserve — where every seller is verified, every payment is protected, and every order arrives."
                 delay={200}
                 speed={20}
+                onComplete={() => setIsQuoteTyped(true)}
               />
               &rdquo;
             </p>
-            <footer className="mt-5 text-sm text-text-secondary">
+            <motion.footer
+              initial={{ opacity: 0, y: 8 }}
+              animate={isQuoteTyped ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="mt-5 text-sm text-text-secondary"
+            >
               <span className="font-semibold text-text-primary">
                 Opeoluwa Lawson
               </span>{" "}
               · Founder, Ziora
-            </footer>
+            </motion.footer>
           </blockquote>
         </Reveal>
       </div>
