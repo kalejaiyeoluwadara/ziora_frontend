@@ -38,7 +38,7 @@ export function HeroSocialProof({ className }: HeroSocialProofProps) {
   }, [reduce]);
 
   return (
-    <div className={cn("relative w-full max-w-md", className)}>
+    <div className={cn("relative w-full max-w-md sm:max-w-lg", className)}>
       <div
         aria-hidden
         className="pointer-events-none absolute -inset-2 rounded-[28px] bg-white/[0.06] blur-xl"
@@ -46,12 +46,12 @@ export function HeroSocialProof({ className }: HeroSocialProofProps) {
 
       <div
         className={cn(
-          "relative flex flex-col items-center gap-3 rounded-[20px]",
-          "border border-white/15 bg-white/[0.08] px-4 py-3.5",
+          "relative flex flex-col items-center gap-3.5 rounded-[20px]",
+          "border border-white/15 bg-white/[0.08] px-6 py-5",
           "shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_12px_32px_rgba(8,28,92,0.18)]",
           "backdrop-blur-xl backdrop-saturate-150",
           "supports-[backdrop-filter]:bg-white/[0.06]",
-          "sm:flex-row sm:items-center sm:gap-5 sm:px-5",
+          "sm:flex-row sm:items-center sm:gap-5 sm:px-5 sm:py-3.5",
         )}
       >
         <div
@@ -61,8 +61,8 @@ export function HeroSocialProof({ className }: HeroSocialProofProps) {
 
         <AvatarCluster members={CLUSTER_MEMBERS} activeIndex={clusterActive} />
 
-        <div className="min-w-0 flex-1 text-center sm:text-left">
-          <div className="relative h-5 overflow-hidden">
+        <div className="w-full min-w-0 flex-1 text-center sm:text-left">
+          <div className="relative h-6 sm:h-5 overflow-hidden w-full">
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.p
                 key={member.name}
@@ -82,7 +82,7 @@ export function HeroSocialProof({ className }: HeroSocialProofProps) {
             </AnimatePresence>
           </div>
 
-          <p className="mt-0 text-[13px] font-medium text-white/70">
+          <p className="mt-0.5 sm:mt-0 text-[13px] font-medium text-white/70">
             <SubscriberCount variant="compact" />
           </p>
         </div>

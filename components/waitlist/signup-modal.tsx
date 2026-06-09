@@ -11,6 +11,7 @@ import {
   Spinner,
 } from "@/components/icons";
 import { saveJoinedSession, clearReferralCode } from "@/lib/waitlist/session";
+import { appendExistingSessionToAdmin } from "@/lib/waitlist/admin-store";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -59,6 +60,16 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
       rank: mockPosition,
       referralCount: 0,
     });
+    
+    // Also save to global admin store so they show up in the admin dashboard!
+    appendExistingSessionToAdmin({
+      email: email.trim().toLowerCase(),
+      position: mockPosition,
+      referralCode: mockRefCode,
+      firstName: email.trim().split("@")[0], // Fallback name
+      roleInterest: selectedRole === "buyer" ? "buyer" : "vendor",
+    });
+
     clearReferralCode();
 
     // Fire event to update subscriber numbers or trigger other UI elements
