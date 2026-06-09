@@ -8,6 +8,7 @@ import { SocialProof } from "@/components/waitlist/social-proof";
 import { StickyMobileCta } from "@/components/waitlist/sticky-mobile-cta";
 import { TrustBento } from "@/components/waitlist/trust-bento";
 import { WaitlistHero } from "@/components/waitlist/waitlist-hero";
+import { ScrollToTop } from "@/components/waitlist/scroll-to-top";
 
 export default function WaitlistLandingPage() {
   return (
@@ -26,6 +27,7 @@ export default function WaitlistLandingPage() {
       </main>
       <SiteFooter />
       <StickyMobileCta />
+      <ScrollToTop />
     </>
   );
 }
