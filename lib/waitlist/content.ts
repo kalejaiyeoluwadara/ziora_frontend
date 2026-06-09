@@ -1,3 +1,21 @@
+const MEMOJI_CDN = "https://cdn.jsdelivr.net/gh/alohe/avatars/png";
+
+export interface SocialMember {
+  name: string;
+  avatar: string;
+}
+
+/** Placeholder early members — full names, memoji faces. Swap for live data later. */
+export const HERO_SOCIAL_MEMBERS: SocialMember[] = [
+  { name: "Chioma Adeyemi", avatar: `${MEMOJI_CDN}/memo_3.png` },
+  { name: "Tunde Bakare", avatar: `${MEMOJI_CDN}/memo_7.png` },
+  { name: "Amina Hassan", avatar: `${MEMOJI_CDN}/memo_12.png` },
+  { name: "Kemi Ogundimu", avatar: `${MEMOJI_CDN}/memo_18.png` },
+  { name: "Opeoluwa Lawson", avatar: `${MEMOJI_CDN}/memo_22.png` },
+  { name: "Ngozi Eze", avatar: `${MEMOJI_CDN}/memo_9.png` },
+  { name: "Emeka Nwosu", avatar: `${MEMOJI_CDN}/memo_15.png` },
+];
+
 export const SOCIAL_LINKS = {
   instagram: "https://instagram.com/ziora",
   twitter: "https://x.com/ziora",

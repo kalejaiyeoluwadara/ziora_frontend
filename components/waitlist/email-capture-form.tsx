@@ -27,6 +27,8 @@ interface EmailCaptureFormProps {
   withRole?: boolean;
   /** Render input + button inside a single rounded "pill" container (desktop). */
   pill?: boolean;
+  /** Frosted glass styling for hero panels on dark gradients. */
+  glass?: boolean;
   /** Tone of helper/validation text against its background. */
   tone?: Tone;
 }
@@ -42,6 +44,7 @@ export function EmailCaptureForm({
   className,
   withRole = false,
   pill = false,
+  glass = false,
   tone = "dark",
 }: EmailCaptureFormProps) {
   const router = useRouter();
@@ -149,7 +152,11 @@ export function EmailCaptureForm({
           "flex flex-col gap-2.5",
           !compact && !pill && "sm:flex-row sm:items-start",
           pill &&
+            !glass &&
             "rounded-2xl bg-white p-2 shadow-xl shadow-brand-blue-dark/15 sm:flex-row sm:items-center sm:gap-2 sm:rounded-full",
+          pill &&
+            glass &&
+            "rounded-2xl border border-white/15 bg-white/10 p-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.18)] sm:flex-row sm:items-center sm:gap-1.5 sm:rounded-full",
         )}
       >
         <div className="flex-1">
@@ -164,10 +171,14 @@ export function EmailCaptureForm({
             placeholder="your@email.com"
             aria-invalid={!!errors.email}
             className={cn(
-              "h-12 w-full text-base text-text-primary placeholder:text-text-muted focus:outline-none",
-              pill
-                ? "rounded-xl bg-bg-card px-4 focus:ring-2 focus:ring-brand-blue-light/30 sm:rounded-full sm:bg-transparent sm:px-5 sm:focus:ring-0"
-                : "rounded-xl border border-transparent bg-bg-card px-4 transition-shadow focus:ring-2 focus:ring-brand-blue-light/30",
+              "h-12 w-full text-base focus:outline-none",
+              pill && !glass &&
+                "rounded-xl bg-bg-card px-4 text-text-primary placeholder:text-text-muted focus:ring-2 focus:ring-brand-blue-light/30 sm:rounded-full sm:bg-transparent sm:px-5 sm:focus:ring-0",
+              pill &&
+                glass &&
+                "rounded-xl bg-white/10 px-4 text-white placeholder:text-white/40 focus:ring-2 focus:ring-white/25 sm:rounded-full sm:bg-transparent sm:px-5 sm:focus:ring-0",
+              !pill &&
+                "rounded-xl border border-transparent bg-bg-card px-4 text-text-primary placeholder:text-text-muted transition-shadow focus:ring-2 focus:ring-brand-blue-light/30",
               errors.email && "ring-2 ring-red-400/50",
             )}
             {...register("email")}
@@ -187,6 +198,8 @@ export function EmailCaptureForm({
             "h-12 w-full shrink-0",
             !compact && !pill && "sm:w-auto",
             pill && "sm:h-11 sm:w-auto sm:px-6",
+            glass &&
+              "shadow-[0_4px_14px_rgba(13,63,199,0.45)] hover:shadow-[0_6px_18px_rgba(13,63,199,0.5)]",
           )}
         >
           {isSubmitting ? (

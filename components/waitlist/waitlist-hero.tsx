@@ -1,8 +1,8 @@
 import { ZioraLogo } from "@/components/icons";
-import { AvatarCluster } from "./avatar-cluster";
-import { EmailCaptureForm } from "./email-capture-form";
+import { HeroKicker } from "./hero-kicker";
+import { HeroSignupGlass } from "./hero-signup-glass";
+import { HeroSocialProof } from "./hero-social-proof";
 import { HeroPreview } from "./hero-preview";
-import { SubscriberCount } from "./subscriber-count";
 import { TrustStrip } from "./trust-strip";
 
 export function WaitlistHero() {
@@ -50,13 +50,7 @@ export function WaitlistHero() {
 
         {/* Centered hero content */}
         <div className="mx-auto flex max-w-2xl flex-col items-center pt-12 text-center sm:pt-16">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/12 px-3.5 py-1.5 text-[12px] font-medium uppercase tracking-[0.08em] text-white ring-1 ring-inset ring-white/15 backdrop-blur-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-success/70" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-success" />
-            </span>
-            Launching in Lagos · Q3 2026
-          </span>
+          <HeroKicker />
 
           <h1 className="mt-6 font-display text-[34px] font-bold leading-[1.05] tracking-[-0.02em] text-white sm:text-[52px] lg:text-[60px]">
             Shop verified sellers.
@@ -68,18 +62,11 @@ export function WaitlistHero() {
             for early access before a single product is listed.
           </p>
 
-          {/* Pill signup form */}
-          <div className="mt-8 w-full max-w-[520px]">
-            <EmailCaptureForm variant="hero" pill tone="light" />
+          <div className="mt-8 w-full max-w-[540px]">
+            <HeroSignupGlass />
           </div>
 
-          {/* Social proof */}
-          <div className="mt-6 flex items-center gap-3">
-            <AvatarCluster />
-            <p className="text-sm font-medium text-white/85">
-              <SubscriberCount variant="compact" />
-            </p>
-          </div>
+          <HeroSocialProof className="mt-6" />
 
           {/* Trust strip */}
           <div className="mt-7">
