@@ -1,21 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Spinner } from "@/components/icons";
-import { WaitlistApiError } from "@/lib/api/client";
-import { API_ERROR_CODES } from "@/lib/api/types";
-import { subscribeToWaitlist } from "@/lib/api/waitlist";
 import { cn } from "@/lib/utils";
 import { subscribeSchema, type SubscribeFormValues } from "@/lib/waitlist/schema";
-import {
-  readReferralCode,
-  clearReferralCode,
-  saveJoinedSession,
-} from "@/lib/waitlist/session";
+import { SignupModal } from "./signup-modal";
 
 type Variant = "hero" | "inline" | "sticky";
 type Tone = "light" | "dark";
@@ -47,9 +39,9 @@ export function EmailCaptureForm({
   glass = false,
   tone = "dark",
 }: EmailCaptureFormProps) {
-  const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
-  const [duplicate, setDuplicate] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState("");
 
   const {
     register,
@@ -66,55 +58,13 @@ export function EmailCaptureForm({
 
   async function onSubmit(values: SubscribeFormValues) {
     setServerError(null);
-    setDuplicate(false);
-
-    const ref = readReferralCode() ?? undefined;
-    const source =
-      typeof window !== "undefined"
-        ? new URLSearchParams(window.location.search).get("utm_source") ??
-          "organic"
-        : "organic";
 
     try {
-      const result = await subscribeToWaitlist({
-        email: values.email.trim().toLowerCase(),
-        firstName: values.firstName?.trim() || undefined,
-        roleInterest: values.roleInterest,
-        company: values.company,
-        ref,
-        source,
-      });
-
-      saveJoinedSession({
-        email: values.email.trim().toLowerCase(),
-        position: result.position,
-        referralCode: result.referralCode,
-        rank: result.rank,
-        referralCount: result.referralCount ?? 0,
-        firstName: values.firstName?.trim() || undefined,
-      });
-      clearReferralCode();
-
-      if (typeof window !== "undefined") {
-        window.dispatchEvent(new CustomEvent("waitlist_signup"));
-      }
-
-      router.push("/joined");
+      // Simulate validation / processing latency
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      setSubmittedEmail(values.email);
+      setShowModal(true);
     } catch (err) {
-      if (err instanceof WaitlistApiError) {
-        if (err.code === API_ERROR_CODES.DUPLICATE_EMAIL) {
-          setDuplicate(true);
-          return;
-        }
-        if (err.code === API_ERROR_CODES.RATE_LIMITED) {
-          setServerError(
-            "We couldn't process that signup. Please try again shortly.",
-          );
-          return;
-        }
-        setServerError(err.message);
-        return;
-      }
       setServerError("Something went wrong. Please try again shortly.");
     }
   }
@@ -123,153 +73,153 @@ export function EmailCaptureForm({
 
   const helperColor = tone === "light" ? "text-white/70" : "text-text-muted";
   const errorColor = tone === "light" ? "text-red-100" : "text-red-500";
-  const dupColor = tone === "light" ? "text-white/80" : "text-text-secondary";
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      noValidate
-      className={cn(
-        "w-full",
-        variant === "hero" && !pill && "max-w-[440px]",
-        className,
-      )}
-    >
-      {/* Honeypot — visually hidden, off-screen, not announced */}
-      <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
-        <label htmlFor="company">Company</label>
-        <input
-          id="company"
-          type="text"
-          tabIndex={-1}
-          autoComplete="off"
-          {...register("company")}
-        />
-      </div>
-
-      <div
+    <>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
         className={cn(
-          "flex flex-col gap-2.5",
-          !compact && !pill && "sm:flex-row sm:items-start",
-          pill &&
-            !glass &&
-            "rounded-2xl bg-white p-2 shadow-xl shadow-brand-blue-dark/15 sm:flex-row sm:items-center sm:gap-2 sm:rounded-full",
-          pill &&
-            glass &&
-            "rounded-2xl border border-white/15 bg-white/10 p-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.18)] sm:flex-row sm:items-center sm:gap-1.5 sm:rounded-full",
+          "w-full",
+          variant === "hero" && !pill && "max-w-[440px]",
+          className,
         )}
       >
-        <div className="flex-1">
-          <label htmlFor={`email-${variant}`} className="sr-only">
-            Email address
-          </label>
+        {/* Honeypot — visually hidden, off-screen, not announced */}
+        <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
+          <label htmlFor="company">Company</label>
           <input
-            id={`email-${variant}`}
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            placeholder="your@email.com"
-            aria-invalid={!!errors.email}
-            className={cn(
-              "h-12 w-full text-base focus:outline-none",
-              pill && !glass &&
-                "rounded-xl bg-bg-card px-4 text-text-primary placeholder:text-text-muted focus:ring-2 focus:ring-brand-blue-light/30 sm:rounded-full sm:bg-transparent sm:px-5 sm:focus:ring-0",
-              pill &&
-                glass &&
-                "rounded-xl bg-white/10 px-4 text-white placeholder:text-white/40 focus:ring-2 focus:ring-white/25 sm:rounded-full sm:bg-transparent sm:px-5 sm:focus:ring-0",
-              !pill &&
-                "rounded-xl border border-transparent bg-bg-card px-4 text-text-primary placeholder:text-text-muted transition-shadow focus:ring-2 focus:ring-brand-blue-light/30",
-              errors.email && "ring-2 ring-red-400/50",
-            )}
-            {...register("email")}
-            onChange={(e) => {
-              setValue("email", e.target.value);
-              if (duplicate) setDuplicate(false);
-              if (serverError) setServerError(null);
-            }}
+            id="company"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            {...register("company")}
           />
         </div>
 
-        <Button
-          type="submit"
-          size="lg"
-          disabled={isSubmitting}
-          className={cn(
-            "h-12 w-full shrink-0",
-            !compact && !pill && "sm:w-auto",
-            pill && "sm:h-11 sm:w-auto sm:px-6",
-            glass &&
-              "shadow-[0_4px_14px_rgba(13,63,199,0.45)] hover:shadow-[0_6px_18px_rgba(13,63,199,0.5)]",
-          )}
-        >
-          {isSubmitting ? (
-            <>
-              <Spinner className="animate-spin" />
-              Joining…
-            </>
-          ) : (
-            <>
-              Get early access
-              <ArrowRight className="h-4 w-4" />
-            </>
-          )}
-        </Button>
-      </div>
-
-      {withRole && (
         <div
           className={cn(
-            "mt-3 flex flex-wrap gap-2",
-            pill && "justify-center",
+            "flex flex-col gap-2.5",
+            !compact && !pill && "sm:flex-row sm:items-start",
+            pill &&
+              !glass &&
+              "rounded-2xl bg-white p-2 shadow-xl shadow-brand-blue-dark/15 sm:flex-row sm:items-center sm:gap-2 sm:rounded-full",
+            pill &&
+              glass &&
+              "rounded-2xl border border-white/15 bg-white/10 p-1.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.18)] sm:flex-row sm:items-center sm:gap-1.5 sm:rounded-full",
           )}
         >
-          {ROLE_OPTIONS.map((opt) => {
-            const active = role === opt.value;
-            return (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() =>
-                  setValue("roleInterest", active ? undefined : opt.value)
-                }
-                aria-pressed={active}
-                className={cn(
-                  "rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors",
-                  active
-                    ? "bg-brand-blue text-white"
-                    : tone === "light"
-                      ? "bg-white/15 text-white hover:bg-white/25"
-                      : "bg-bg-card text-text-secondary hover:bg-[#E1E9FF]",
-                )}
-              >
-                {opt.label}
-              </button>
-            );
-          })}
-        </div>
-      )}
+          <div className="flex-1">
+            <label htmlFor={`email-${variant}`} className="sr-only">
+              Email address
+            </label>
+            <input
+              id={`email-${variant}`}
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              placeholder="your@email.com"
+              aria-invalid={!!errors.email}
+              className={cn(
+                "h-12 w-full text-base focus:outline-none",
+                pill && !glass &&
+                  "rounded-xl bg-bg-card px-4 text-text-primary placeholder:text-text-muted focus:ring-2 focus:ring-brand-blue-light/30 sm:rounded-full sm:bg-transparent sm:px-5 sm:focus:ring-0",
+                pill &&
+                  glass &&
+                  "rounded-xl bg-white/10 px-4 text-white placeholder:text-white/40 focus:ring-2 focus:ring-white/25 sm:rounded-full sm:bg-transparent sm:px-5 sm:focus:ring-0",
+                !pill &&
+                  "rounded-xl border border-transparent bg-bg-card px-4 text-text-primary placeholder:text-text-muted transition-shadow focus:ring-2 focus:ring-brand-blue-light/30",
+                errors.email && "ring-2 ring-red-400/50",
+              )}
+              {...register("email")}
+              onChange={(e) => {
+                setValue("email", e.target.value);
+                if (serverError) setServerError(null);
+              }}
+            />
+          </div>
 
-      {/* Validation + server messaging */}
-      <div aria-live="polite" className="min-h-[20px]">
-        {errors.email && (
-          <p className={cn("mt-2 text-sm", errorColor)}>{errors.email.message}</p>
+          <Button
+            type="submit"
+            size="lg"
+            disabled={isSubmitting}
+            className={cn(
+              "h-12 w-full shrink-0",
+              !compact && !pill && "sm:w-auto",
+              pill && "sm:h-11 sm:w-auto sm:px-6",
+              glass &&
+                "shadow-[0_4px_14px_rgba(13,63,199,0.45)] hover:shadow-[0_6px_18px_rgba(13,63,199,0.5)]",
+            )}
+          >
+            {isSubmitting ? (
+              <>
+                <Spinner className="animate-spin" />
+                Joining…
+              </>
+            ) : (
+              <>
+                Get early access
+                <ArrowRight className="h-4 w-4" />
+              </>
+            )}
+          </Button>
+        </div>
+
+        {withRole && (
+          <div
+            className={cn(
+              "mt-3 flex flex-wrap gap-2",
+              pill && "justify-center",
+            )}
+          >
+            {ROLE_OPTIONS.map((opt) => {
+              const active = role === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() =>
+                    setValue("roleInterest", active ? undefined : opt.value)
+                  }
+                  aria-pressed={active}
+                  className={cn(
+                    "rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors",
+                    active
+                      ? "bg-brand-blue text-white"
+                      : tone === "light"
+                        ? "bg-white/15 text-white hover:bg-white/25"
+                        : "bg-bg-card text-text-secondary hover:bg-[#E1E9FF]",
+                  )}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
         )}
-        {serverError && (
-          <p className={cn("mt-2 text-sm", errorColor)}>{serverError}</p>
-        )}
-        {duplicate && (
-          <p className={cn("mt-2 text-sm", dupColor)}>
-            You&apos;re already on the list. Check your inbox for your spot —
-            we&apos;ll be in touch when your wave opens.
+
+        {/* Validation + server messaging */}
+        <div aria-live="polite" className="min-h-[20px]">
+          {errors.email && (
+            <p className={cn("mt-2 text-sm", errorColor)}>{errors.email.message}</p>
+          )}
+          {serverError && (
+            <p className={cn("mt-2 text-sm", errorColor)}>{serverError}</p>
+          )}
+        </div>
+
+        {!compact && (
+          <p className={cn("mt-1 text-[13px]", pill && "text-center", helperColor)}>
+            Free to join · No spam · Unsubscribe anytime
           </p>
         )}
-      </div>
+      </form>
 
-      {!compact && (
-        <p className={cn("mt-1 text-[13px]", pill && "text-center", helperColor)}>
-          Free to join · No spam · Unsubscribe anytime
-        </p>
-      )}
-    </form>
+      <SignupModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        email={submittedEmail}
+      />
+    </>
   );
 }
