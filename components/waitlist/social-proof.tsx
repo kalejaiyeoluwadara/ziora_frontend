@@ -1,5 +1,6 @@
 import { SubscriberCount } from "./subscriber-count";
 import { Reveal } from "./reveal";
+import { Typewriter } from "./typewriter";
 
 export function SocialProof() {
   return (
@@ -11,10 +12,14 @@ export function SocialProof() {
 
         <Reveal delay={0.08}>
           <blockquote className="mt-12 border-t border-black/5 pt-12">
-            <p className="font-display text-xl font-medium leading-8 text-text-primary sm:text-2xl sm:leading-9">
-              &ldquo;We&apos;re building the marketplace Nigerians deserve — where
-              every seller is verified, every payment is protected, and every
-              order arrives.&rdquo;
+            <p className="font-display text-xl font-medium leading-8 text-text-primary sm:text-2xl sm:leading-9 min-h-[110px] sm:min-h-[72px]">
+              &ldquo;
+              <Typewriter
+                text="We're building the marketplace Nigerians deserve — where every seller is verified, every payment is protected, and every order arrives."
+                delay={200}
+                speed={20}
+              />
+              &rdquo;
             </p>
             <footer className="mt-5 text-sm text-text-secondary">
               <span className="font-semibold text-text-primary">
