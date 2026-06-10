@@ -1,7 +1,13 @@
 import { SITE_URL } from "@/lib/api/client";
 
 export function referralUrl(code: string): string {
-  return `${SITE_URL.replace(/\/$/, "")}/join?ref=${code}`;
+  const base = SITE_URL.replace(/\/$/, "");
+  return `${base}/?ref=${encodeURIComponent(code)}`;
+}
+
+/** URL without protocol — for compact UI display. */
+export function referralDisplayUrl(code: string): string {
+  return referralUrl(code).replace(/^https?:\/\//, "");
 }
 
 const SHARE_MESSAGE =

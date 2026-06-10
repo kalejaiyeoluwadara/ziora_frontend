@@ -12,6 +12,7 @@ import {
 } from "@/components/icons";
 import { saveJoinedSession, clearReferralCode } from "@/lib/waitlist/session";
 import { appendExistingSessionToAdmin } from "@/lib/waitlist/admin-store";
+import { referralDisplayUrl, referralUrl } from "@/lib/waitlist/share";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -81,16 +82,21 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
     setStep("success");
   };
 
+  const referralLink = mockRefCode ? referralUrl(mockRefCode) : "";
+  const referralLinkDisplay = mockRefCode
+    ? referralDisplayUrl(mockRefCode)
+    : "";
+
   const handleCopyLink = () => {
-    const url = `https://ziora.co/join?ref=${mockRefCode}`;
-    navigator.clipboard.writeText(url).then(() => {
+    if (!referralLink) return;
+    navigator.clipboard.writeText(referralLink).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
   };
 
   const shareText = encodeURIComponent(
-    `I just joined the waitlist for Ziora, the multi-vendor marketplace built for Nigeria! Get early access here: https://ziora.co/join?ref=${mockRefCode}`
+    `I just joined the waitlist for Ziora, the multi-vendor marketplace built for Nigeria! Get early access here: ${referralLink}`,
   );
 
   // Success particles array for burst animation
@@ -373,7 +379,7 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
                             </span>
                             <div className="mt-2 flex items-center gap-1 bg-white/70 border border-brand-blue/10 p-1.5 rounded-full pl-3 shadow-sm">
                               <span className="flex-1 truncate text-xs text-text-secondary select-all font-mono font-semibold">
-                                ziora.co/join?ref={mockRefCode}
+                                {referralLinkDisplay}
                               </span>
                               <button
                                 type="button"
