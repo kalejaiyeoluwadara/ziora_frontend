@@ -23,6 +23,8 @@ interface EmailCaptureFormProps {
   glass?: boolean;
   /** Tone of helper/validation text against its background. */
   tone?: Tone;
+  /** When set, parent owns the signup modal (e.g. hero). */
+  onSignupRequest?: (email: string) => void;
 }
 
 const ROLE_OPTIONS: { value: "buyer" | "vendor" | "both"; label: string }[] = [
@@ -38,10 +40,12 @@ export function EmailCaptureForm({
   pill = false,
   glass = false,
   tone = "dark",
+  onSignupRequest,
 }: EmailCaptureFormProps) {
   const [serverError, setServerError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState("");
+  const ownsModal = !onSignupRequest;
 
   const {
     register,
@@ -62,6 +66,10 @@ export function EmailCaptureForm({
     try {
       // Simulate validation / processing latency
       await new Promise((resolve) => setTimeout(resolve, 600));
+      if (onSignupRequest) {
+        onSignupRequest(values.email.trim().toLowerCase());
+        return;
+      }
       setSubmittedEmail(values.email);
       setShowModal(true);
     } catch (err) {
@@ -215,11 +223,13 @@ export function EmailCaptureForm({
         )}
       </form>
 
-      <SignupModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        email={submittedEmail}
-      />
+      {ownsModal && (
+        <SignupModal
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          email={submittedEmail}
+        />
+      )}
     </>
   );
 }

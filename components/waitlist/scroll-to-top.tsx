@@ -39,7 +39,7 @@ export function ScrollToTop() {
           whileTap={{ scale: 0.95 }}
           transition={{ type: "spring", stiffness: 400, damping: 25 }}
           aria-label="Scroll to top"
-          className="fixed z-40 flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-brand-blue/90 text-white shadow-xl backdrop-blur-md transition-colors duration-200 hover:bg-brand-blue-light focus:outline-none focus:ring-2 focus:ring-brand-blue-light/50 focus:ring-offset-2 focus:ring-offset-transparent bottom-24 right-4 lg:bottom-8 lg:right-8"
+          className="fixed right-8 bottom-8 z-40 hidden h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-brand-blue/90 text-white shadow-xl backdrop-blur-md transition-colors duration-200 hover:bg-brand-blue-light focus:ring-2 focus:ring-brand-blue-light/50 focus:ring-offset-2 focus:ring-offset-transparent focus:outline-none lg:flex"
         >
           {/* Custom animated Arrow Up */}
           <svg

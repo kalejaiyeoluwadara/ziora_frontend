@@ -1,7 +1,7 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useState, useEffect } from "react";
 import {
   ZioraLogo,
@@ -23,7 +23,33 @@ interface SignupModalProps {
 type Step = "role" | "success";
 type Role = "buyer" | "vendor";
 
+const modalSpring = { type: "spring" as const, damping: 28, stiffness: 320 };
+
+const stepVariants = {
+  enter: { opacity: 0, x: 24, filter: "blur(4px)" },
+  center: { opacity: 1, x: 0, filter: "blur(0px)" },
+  exit: { opacity: 0, x: -24, filter: "blur(4px)" },
+};
+
+const cardStagger = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
+  },
+};
+
+const cardItem = {
+  hidden: { opacity: 0, y: 12 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
+
 export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
+  const reduce = !!useReducedMotion();
   const [step, setStep] = useState<Step>("role");
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -110,20 +136,28 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
             <Dialog.Overlay asChild>
               <motion.div
                 className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md"
-                initial={{ opacity: 0 }}
+                initial={reduce ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
+                exit={reduce ? undefined : { opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
               />
             </Dialog.Overlay>
-            
+
             <Dialog.Content asChild>
               <motion.div
-                className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-32px)] max-w-[460px] rounded-[28px] bg-white p-6 shadow-[0_24px_70px_rgba(8,28,92,0.3)] border border-black/5 outline-none md:p-8 overflow-hidden"
-                initial={{ opacity: 0, scale: 0.95, x: "-50%", y: "-47%" }}
+                className="fixed top-1/2 left-1/2 z-50 w-[calc(100%-32px)] max-w-[460px] overflow-hidden rounded-[28px] border border-black/5 bg-white p-6 shadow-[0_24px_70px_rgba(8,28,92,0.3)] outline-none md:p-8"
+                initial={
+                  reduce
+                    ? { x: "-50%", y: "-50%" }
+                    : { opacity: 0, scale: 0.9, x: "-50%", y: "calc(-50% + 28px)" }
+                }
                 animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
-                exit={{ opacity: 0, scale: 0.95, x: "-50%", y: "-47%" }}
-                transition={{ type: "spring", damping: 25, stiffness: 250 }}
+                exit={
+                  reduce
+                    ? { x: "-50%", y: "-50%" }
+                    : { opacity: 0, scale: 0.94, x: "-50%", y: "calc(-50% + 16px)" }
+                }
+                transition={modalSpring}
               >
                 {/* Floating ambient gradient behind card content */}
                 <div 
@@ -138,17 +172,24 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
                 </Dialog.Close>
 
                 <div className="relative z-10 flex flex-col items-center">
-                  <ZioraLogo className="text-brand-blue h-6.5 mb-6" />
+                  <motion.div
+                    initial={reduce ? false : { opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: 0.05 }}
+                  >
+                    <ZioraLogo className="mb-6 h-6.5 text-brand-blue" />
+                  </motion.div>
 
                   <AnimatePresence mode="wait">
                     {step === "role" ? (
                       <motion.div
                         key="role-step"
-                        className="w-full flex flex-col items-center"
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.2 }}
+                        className="flex w-full flex-col items-center"
+                        variants={reduce ? undefined : stepVariants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        transition={modalSpring}
                       >
                         <h2 className="text-center font-display text-xl font-bold tracking-tight text-text-primary sm:text-2xl">
                           Choose your experience
@@ -158,9 +199,15 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
                         </p>
 
                         {/* Interactive Role Cards */}
-                        <div className="mt-6 w-full flex flex-col gap-3">
+                        <motion.div
+                          className="mt-6 flex w-full flex-col gap-3"
+                          variants={reduce ? undefined : cardStagger}
+                          initial="hidden"
+                          animate="show"
+                        >
                           {/* Buyer Card */}
-                          <button
+                          <motion.button
+                            variants={reduce ? undefined : cardItem}
                             type="button"
                             onClick={() => setSelectedRole("buyer")}
                             className={`group relative flex items-start gap-4 rounded-2xl border-2 p-4 text-left transition-all duration-200 outline-none ${
@@ -211,10 +258,11 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
                                 </svg>
                               )}
                             </div>
-                          </button>
+                          </motion.button>
 
                           {/* Vendor Card */}
-                          <button
+                          <motion.button
+                            variants={reduce ? undefined : cardItem}
                             type="button"
                             onClick={() => setSelectedRole("vendor")}
                             className={`group relative flex items-start gap-4 rounded-2xl border-2 p-4 text-left transition-all duration-200 outline-none ${
@@ -265,11 +313,14 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
                                 </svg>
                               )}
                             </div>
-                          </button>
-                        </div>
+                          </motion.button>
+                        </motion.div>
 
                         {/* Submit Action */}
-                        <button
+                        <motion.button
+                          initial={reduce ? false : { opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.2, ...modalSpring }}
                           type="button"
                           onClick={handleConfirmRole}
                           disabled={!selectedRole || isSubmitting}
@@ -287,16 +338,17 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
                           ) : (
                             <>Confirm & Join Waitlist</>
                           )}
-                        </button>
+                        </motion.button>
                       </motion.div>
                     ) : (
                       <motion.div
                         key="success-step"
-                        className="w-full flex flex-col items-center"
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.25 }}
+                        className="flex w-full flex-col items-center"
+                        variants={reduce ? undefined : stepVariants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        transition={modalSpring}
                       >
                         {/* Animated Success Badge with radial aura */}
                         <div className="relative flex items-center justify-center w-24 h-24 mb-4">
@@ -353,7 +405,12 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
                         </p>
 
                         {/* Glassmorphic Ticket Pass */}
-                        <div className="mt-6 w-full relative overflow-hidden rounded-2xl border border-brand-blue/20 bg-gradient-to-br from-brand-blue/10 to-brand-blue-light/5 p-5 shadow-inner">
+                        <motion.div
+                          className="relative mt-6 w-full overflow-hidden rounded-2xl border border-brand-blue/20 bg-gradient-to-br from-brand-blue/10 to-brand-blue-light/5 p-5 shadow-inner"
+                          initial={reduce ? false : { opacity: 0, y: 16, scale: 0.96 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          transition={{ delay: 0.15, ...modalSpring }}
+                        >
                           {/* Top-Right Glowing Orb */}
                           <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-brand-blue-light/20 blur-xl pointer-events-none" />
                           
@@ -408,7 +465,7 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
                               </button>
                             </div>
                           </div>
-                        </div>
+                        </motion.div>
 
                         {/* Social Share actions */}
                         <div className="mt-6 w-full flex flex-col items-center">

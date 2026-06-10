@@ -3,13 +3,17 @@ import { cn } from "@/lib/utils";
 
 interface HeroSignupGlassProps {
   className?: string;
+  onSignupRequest?: (email: string) => void;
 }
 
 /**
  * iOS-style frosted glass panel for the hero signup — blur, specular edge,
  * and a soft halo so the form floats above the gradient.
  */
-export function HeroSignupGlass({ className }: HeroSignupGlassProps) {
+export function HeroSignupGlass({
+  className,
+  onSignupRequest,
+}: HeroSignupGlassProps) {
   return (
     <div className={cn("relative w-full", className)}>
       {/* Ambient halo */}
@@ -34,7 +38,13 @@ export function HeroSignupGlass({ className }: HeroSignupGlassProps) {
           <p className="mb-3 text-center text-[13px] font-medium text-white/75">
             Reserve your spot — takes 10 seconds
           </p>
-          <EmailCaptureForm variant="hero" pill glass tone="light" />
+          <EmailCaptureForm
+            variant="hero"
+            pill
+            glass
+            tone="light"
+            onSignupRequest={onSignupRequest}
+          />
         </div>
       </div>
     </div>
