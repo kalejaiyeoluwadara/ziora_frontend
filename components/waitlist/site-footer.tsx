@@ -9,7 +9,7 @@ export function SiteFooter() {
         <div>
           <ZioraLogo className="h-7 text-brand-blue" />
           <p className="mt-3 max-w-xs text-sm text-text-secondary">
-            Nigeria&apos;s trust-first marketplace. Lagos-first, mobile-first.
+          Nigeria&apos;s trust-first marketplace. Everything you need, in one place.
           </p>
         </div>
 

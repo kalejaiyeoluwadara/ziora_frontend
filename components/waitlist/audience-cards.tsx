@@ -135,7 +135,7 @@ function EarningsCalculator() {
           
           {/* Commission box */}
           <div className="rounded-lg bg-bg-section/60 p-2.5 border border-black/[0.02]">
-            <p className="text-[8px] font-semibold uppercase tracking-[0.03em] text-text-muted">Ziora Flat Fee (5%)</p>
+            <p className="text-[8px] font-semibold uppercase tracking-[0.03em] text-text-muted">5% commission per sale</p>
             <p className="mt-1 text-xs font-bold text-text-secondary font-mono tabular-nums">
               ₦{zioraCut.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             </p>
