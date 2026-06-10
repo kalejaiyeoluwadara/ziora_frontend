@@ -1,7 +1,12 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import {
+  AnimatePresence,
+  motion,
+  useDragControls,
+  useReducedMotion,
+} from "motion/react";
 import { useState, useEffect } from "react";
 import {
   ZioraLogo,
@@ -10,9 +15,11 @@ import {
   WhatsApp,
   Spinner,
 } from "@/components/icons";
+import { useIsMobile } from "@/lib/hooks/use-is-mobile";
 import { saveJoinedSession, clearReferralCode } from "@/lib/waitlist/session";
 import { appendExistingSessionToAdmin } from "@/lib/waitlist/admin-store";
 import { referralDisplayUrl, referralUrl } from "@/lib/waitlist/share";
+import { cn } from "@/lib/utils";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -24,6 +31,10 @@ type Step = "role" | "success";
 type Role = "buyer" | "vendor";
 
 const modalSpring = { type: "spring" as const, damping: 28, stiffness: 320 };
+const drawerSpring = { type: "spring" as const, damping: 34, stiffness: 380 };
+
+const DRAWER_DISMISS_OFFSET = 80;
+const DRAWER_DISMISS_VELOCITY = 400;
 
 const stepVariants = {
   enter: { opacity: 0, x: 24, filter: "blur(4px)" },
@@ -50,6 +61,9 @@ const cardItem = {
 
 export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
   const reduce = !!useReducedMotion();
+  const isMobile = useIsMobile();
+  const isDrawer = isMobile && !reduce;
+  const dragControls = useDragControls();
   const [step, setStep] = useState<Step>("role");
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -145,39 +159,118 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
 
             <Dialog.Content asChild>
               <motion.div
-                className="fixed top-1/2 left-1/2 z-50 w-[calc(100%-32px)] max-w-[460px] overflow-hidden rounded-[28px] border border-black/5 bg-white p-6 shadow-[0_24px_70px_rgba(8,28,92,0.3)] outline-none md:p-8"
+                drag={isDrawer ? "y" : false}
+                dragControls={dragControls}
+                dragListener={false}
+                dragConstraints={{ top: 0, bottom: 0 }}
+                dragElastic={{ top: 0.04, bottom: 0.42 }}
+                onDragEnd={(_, info) => {
+                  if (
+                    isDrawer &&
+                    (info.offset.y > DRAWER_DISMISS_OFFSET ||
+                      info.velocity.y > DRAWER_DISMISS_VELOCITY)
+                  ) {
+                    onClose();
+                  }
+                }}
+                className={cn(
+                  "fixed z-50 flex flex-col overflow-hidden border border-black/5 bg-white outline-none",
+                  isMobile
+                    ? "inset-x-0 bottom-0 max-h-[92dvh] rounded-t-[28px] shadow-[0_-16px_60px_rgba(8,28,92,0.28)]"
+                    : "top-1/2 left-1/2 w-[calc(100%-32px)] max-w-[460px] rounded-[28px] p-6 shadow-[0_24px_70px_rgba(8,28,92,0.3)] md:p-8",
+                )}
                 initial={
-                  reduce
-                    ? { x: "-50%", y: "-50%" }
-                    : { opacity: 0, scale: 0.9, x: "-50%", y: "calc(-50% + 28px)" }
+                  isMobile
+                    ? reduce
+                      ? { y: 0 }
+                      : { y: "100%" }
+                    : reduce
+                      ? { x: "-50%", y: "-50%" }
+                      : {
+                          opacity: 0,
+                          scale: 0.9,
+                          x: "-50%",
+                          y: "calc(-50% + 28px)",
+                        }
                 }
-                animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
+                animate={
+                  isMobile
+                    ? { y: 0 }
+                    : { opacity: 1, scale: 1, x: "-50%", y: "-50%" }
+                }
                 exit={
-                  reduce
-                    ? { x: "-50%", y: "-50%" }
-                    : { opacity: 0, scale: 0.94, x: "-50%", y: "calc(-50% + 16px)" }
+                  isMobile
+                    ? reduce
+                      ? { y: 0 }
+                      : { y: "100%" }
+                    : reduce
+                      ? { x: "-50%", y: "-50%" }
+                      : {
+                          opacity: 0,
+                          scale: 0.94,
+                          x: "-50%",
+                          y: "calc(-50% + 16px)",
+                        }
                 }
-                transition={modalSpring}
+                transition={isMobile ? drawerSpring : modalSpring}
               >
                 {/* Floating ambient gradient behind card content */}
-                <div 
-                  aria-hidden="true" 
-                  className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full bg-brand-blue-light/10 blur-3xl"
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -top-40 -left-40 h-96 w-96 rounded-full bg-brand-blue-light/10 blur-3xl"
                 />
 
-                <Dialog.Close className="absolute right-4 top-4 rounded-full p-2 text-text-secondary hover:bg-bg-section transition-colors hover:text-text-primary outline-none">
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                {isMobile && (
+                  <div
+                    className="flex shrink-0 cursor-grab flex-col items-center px-5 pt-3 pb-1 active:cursor-grabbing"
+                    aria-hidden="true"
+                    style={{ touchAction: "none" }}
+                    onPointerDown={(event) => dragControls.start(event)}
+                  >
+                    <span className="h-1 w-10 rounded-full bg-black/12" />
+                  </div>
+                )}
+
+                <Dialog.Close
+                  className={cn(
+                    "absolute rounded-full p-2 text-text-secondary transition-colors outline-none hover:bg-bg-section hover:text-text-primary",
+                    isMobile ? "top-3 right-4" : "top-4 right-4",
+                  )}
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </Dialog.Close>
 
-                <div className="relative z-10 flex flex-col items-center">
+                <div
+                  className={cn(
+                    "relative z-10 flex flex-col items-center",
+                    isMobile &&
+                      "max-h-[calc(92dvh-2.5rem)] overflow-y-auto overscroll-contain px-5 pt-2 pb-[max(2rem,env(safe-area-inset-bottom))]",
+                    !isMobile && "w-full",
+                  )}
+                >
                   <motion.div
                     initial={reduce ? false : { opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35, delay: 0.05 }}
                   >
-                    <ZioraLogo className="mb-6 h-6.5 text-brand-blue" />
+                    <ZioraLogo
+                      className={cn(
+                        "h-6.5 text-brand-blue",
+                        isMobile ? "mb-4" : "mb-6",
+                      )}
+                    />
                   </motion.div>
 
                   <AnimatePresence mode="wait">

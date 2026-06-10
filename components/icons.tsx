@@ -99,6 +99,26 @@ export function ArrowRight(props: IconProps) {
   );
 }
 
+export function Eye(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" />
+      <circle cx="12" cy="12" r="2.75" />
+    </svg>
+  );
+}
+
+export function EyeOff(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M10.7 10.7A2.75 2.75 0 0 0 12 15.25c1.1 0 2.05-.65 2.5-1.58" />
+      <path d="m9.9 5.1A9.77 9.77 0 0 1 12 4.75c6 0 9.5 7.25 9.5 7.25a16.2 16.2 0 0 1-3.45 4.12" />
+      <path d="M6.7 6.7A16.2 16.2 0 0 0 2.5 12s3.5 6.5 9.5 6.5c1.05 0 2.03-.2 2.93-.55" />
+      <path d="m3 3 18 18" />
+    </svg>
+  );
+}
+
 export function Check(props: IconProps) {
   return (
     <svg {...base} {...props}>

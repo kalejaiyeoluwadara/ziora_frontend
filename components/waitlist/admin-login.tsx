@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ZioraLogo, Spinner, ArrowRight } from "@/components/icons";
+import { ZioraLogo, Spinner, ArrowRight, Eye, EyeOff } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 
 interface AdminLoginProps {
@@ -13,6 +13,7 @@ export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -118,17 +119,32 @@ export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
               <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wider text-white/60 mb-2">
                 Password
               </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setError(null);
-                }}
-                placeholder="••••••••••••"
-                className="h-12 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-white/25 transition-all"
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError(null);
+                  }}
+                  placeholder="••••••••••••"
+                  className="h-12 w-full rounded-xl border border-white/10 bg-white/5 pr-12 pl-4 text-sm text-white placeholder:text-white/30 transition-all focus:ring-2 focus:ring-white/25 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-white/45 transition-colors hover:text-white/80 focus:outline-none"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4.5 w-4.5" />
+                  ) : (
+                    <Eye className="h-4.5 w-4.5" />
+                  )}
+                </button>
+              </div>
             </div>
 
             {error && (
