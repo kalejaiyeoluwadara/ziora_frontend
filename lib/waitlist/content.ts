@@ -27,11 +27,11 @@ export interface FaqItem {
   answer: string;
 }
 
-export const FAQ_ITEMS: FaqItem[] = [
+export const BUYER_FAQ_ITEMS: FaqItem[] = [
   {
     question: "When does Ziora launch?",
     answer:
-      "We're onboarding our first cohort of verified vendors now. Waitlist members get access in waves starting Q3 2026 — the earlier you join, the earlier your wave.",
+      "We're opening access in waves starting Q3 2026. Waitlist members get invites as each wave opens — the earlier you join, the earlier your wave.",
   },
   {
     question: "Is it free to join the waitlist?",
@@ -46,12 +46,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     question: "What makes Ziora different?",
     answer:
-      "Every vendor is manually reviewed before they can sell. Payments are secured by Paystack and held until your order is delivered. It's a marketplace built for trust first.",
-  },
-  {
-    question: "Can I sell on Ziora?",
-    answer:
-      "Absolutely. Choose \"I want to sell\" when you join and you'll be first in line for vendor onboarding when we open applications.",
+      "Every seller is manually reviewed before they can list. Payments are secured by Paystack and held until your order is delivered. It's a marketplace built for trust first.",
   },
   {
     question: "What happens to my data?",
@@ -60,7 +55,43 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
 ];
 
-export const HOW_IT_WORKS = [
+export const VENDOR_FAQ_ITEMS: FaqItem[] = [
+  {
+    question: "When can I start selling?",
+    answer:
+      "We're onboarding our first cohort of verified vendors now. Vendor waitlist members get application invites in waves starting Q3 2026 — join early to be first in line.",
+  },
+  {
+    question: "What are the fees?",
+    answer:
+      "Ziora charges a 5% commission per completed sale. There are no signup fees, no listing fees, and no monthly subscriptions at launch.",
+  },
+  {
+    question: "How does vendor verification work?",
+    answer:
+      "Every seller is manually reviewed before they can list. We verify your identity and business details so buyers know they're shopping from real, trusted vendors.",
+  },
+  {
+    question: "How do payouts work?",
+    answer:
+      "Buyer payments are held in escrow via Paystack and released to you 48–72 hours after delivery is confirmed. Weekly batch payouts every Monday.",
+  },
+  {
+    question: "Do I need to be in Lagos?",
+    answer:
+      "We're Lagos-first at launch with same-day delivery via Kwik. Vendors outside Lagos can still apply — nationwide shipping via GIG Logistics opens at launch.",
+  },
+  {
+    question: "What happens to my data?",
+    answer:
+      "Your email is used only to contact you about vendor onboarding and Ziora's launch. We never sell your data, and you can unsubscribe from any email with one click.",
+  },
+];
+
+/** @deprecated Use BUYER_FAQ_ITEMS or VENDOR_FAQ_ITEMS */
+export const FAQ_ITEMS = BUYER_FAQ_ITEMS;
+
+export const BUYER_HOW_IT_WORKS = [
   {
     step: 1,
     title: "Join the list",
@@ -77,3 +108,24 @@ export const HOW_IT_WORKS = [
     body: "Get your invite, set up your account, and start buying with confidence.",
   },
 ];
+
+export const VENDOR_HOW_IT_WORKS = [
+  {
+    step: 1,
+    title: "Join the vendor list",
+    body: "Reserve your spot on the vendor waitlist. Free, no upfront fees.",
+  },
+  {
+    step: 2,
+    title: "Get verified",
+    body: "Complete a quick review so buyers know your storefront is trusted from day one.",
+  },
+  {
+    step: 3,
+    title: "Start selling",
+    body: "List products, fulfil orders with Kwik or GIG, and get paid reliably after every delivery.",
+  },
+];
+
+/** @deprecated Use BUYER_HOW_IT_WORKS or VENDOR_HOW_IT_WORKS */
+export const HOW_IT_WORKS = BUYER_HOW_IT_WORKS;

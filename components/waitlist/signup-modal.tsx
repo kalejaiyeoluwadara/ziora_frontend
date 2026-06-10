@@ -25,6 +25,8 @@ interface SignupModalProps {
   isOpen: boolean;
   onClose: () => void;
   email: string;
+  /** When set, skips the buyer/vendor choice and registers under this role. */
+  presetRole?: "buyer" | "vendor";
 }
 
 type Step = "role" | "success";
@@ -59,13 +61,13 @@ const cardItem = {
   },
 };
 
-export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
+export function SignupModal({ isOpen, onClose, email, presetRole }: SignupModalProps) {
   const reduce = !!useReducedMotion();
   const isMobile = useIsMobile();
   const isDrawer = isMobile && !reduce;
   const dragControls = useDragControls();
   const [step, setStep] = useState<Step>("role");
-  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [selectedRole, setSelectedRole] = useState<Role | null>(presetRole ?? null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
   const [mockPosition, setMockPosition] = useState(0);
@@ -75,7 +77,7 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
   useEffect(() => {
     if (isOpen) {
       setStep("role");
-      setSelectedRole(null);
+      setSelectedRole(presetRole ?? null);
       setIsSubmitting(false);
       setCopied(false);
       
@@ -84,7 +86,7 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
       const randHex = Math.random().toString(36).substring(2, 7).toUpperCase();
       setMockRefCode(`ZR${randHex}`);
     }
-  }, [isOpen]);
+  }, [isOpen, presetRole]);
 
   const handleConfirmRole = async () => {
     if (!selectedRole) return;
@@ -285,13 +287,19 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
                         transition={modalSpring}
                       >
                         <h2 className="text-center font-display text-xl font-bold tracking-tight text-text-primary sm:text-2xl">
-                          Choose your experience
+                          {presetRole
+                            ? presetRole === "vendor"
+                              ? "Join the vendor waitlist"
+                              : "Join the buyer waitlist"
+                            : "Choose your experience"}
                         </h2>
                         <p className="mt-1 text-center text-sm text-text-secondary">
-                          Help us tailor Ziora for you. What are you joining as?
+                          {presetRole
+                            ? `You're signing up as a ${presetRole}. Confirm to reserve your spot on the Ziora waitlist.`
+                            : "Help us tailor Ziora for you. What are you joining as?"}
                         </p>
 
-                        {/* Interactive Role Cards */}
+                        {!presetRole && (
                         <motion.div
                           className="mt-6 flex w-full flex-col gap-3"
                           variants={reduce ? undefined : cardStagger}
@@ -408,6 +416,7 @@ export function SignupModal({ isOpen, onClose, email }: SignupModalProps) {
                             </div>
                           </motion.button>
                         </motion.div>
+                        )}
 
                         {/* Submit Action */}
                         <motion.button

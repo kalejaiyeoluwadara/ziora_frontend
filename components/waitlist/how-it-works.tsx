@@ -1,7 +1,20 @@
-import { HOW_IT_WORKS } from "@/lib/waitlist/content";
+import { BUYER_HOW_IT_WORKS } from "@/lib/waitlist/content";
 import { referralDisplayUrl } from "@/lib/waitlist/share";
 import { Reveal } from "./reveal";
 import { BadgeCheck, CheckCircle, Copy, Lock } from "@/components/icons";
+
+interface HowItWorksStep {
+  step: number;
+  title: string;
+  body: string;
+}
+
+interface HowItWorksProps {
+  steps?: HowItWorksStep[];
+  /** Buyer steps include interactive previews; vendor steps are text-only. */
+  variant?: "buyer" | "vendor";
+  subtitle?: string;
+}
 
 function Step1Visual() {
   return (
@@ -97,7 +110,13 @@ function Step3Visual() {
   );
 }
 
-export function HowItWorks() {
+export function HowItWorks({
+  steps = BUYER_HOW_IT_WORKS,
+  variant = "buyer",
+  subtitle = "Reserve your spot, share with your network, and get ready for a trusted shopping experience.",
+}: HowItWorksProps) {
+  const showVisuals = variant === "buyer";
+
   return (
     <section className="bg-bg-section py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
@@ -107,13 +126,13 @@ export function HowItWorks() {
               How it works
             </h2>
             <p className="mx-auto mt-2.5 max-w-md text-sm text-text-secondary sm:text-[15px]">
-              Reserve your spot, share with your network, and get ready for a trusted shopping experience.
+              {subtitle}
             </p>
           </div>
         </Reveal>
 
         <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-6">
-          {HOW_IT_WORKS.map(({ step, title, body }, i) => (
+          {steps.map(({ step, title, body }, i) => (
             <Reveal key={step} delay={i * 0.08} className="flex">
               <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-black/5 bg-white p-6 sm:p-8 w-full transition-all duration-300 hover:-translate-y-1 hover:border-black/10 hover:shadow-sm">
                 <div>
@@ -128,9 +147,9 @@ export function HowItWorks() {
                   </p>
                 </div>
                 {/* Step specific visual previews */}
-                {step === 1 && <Step1Visual />}
-                {step === 2 && <Step2Visual />}
-                {step === 3 && <Step3Visual />}
+                {showVisuals && step === 1 && <Step1Visual />}
+                {showVisuals && step === 2 && <Step2Visual />}
+                {showVisuals && step === 3 && <Step3Visual />}
               </div>
             </Reveal>
           ))}

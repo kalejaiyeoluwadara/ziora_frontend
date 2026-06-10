@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 interface HeroSignupGlassProps {
   className?: string;
   onSignupRequest?: (email: string) => void;
+  signupLabel?: string;
 }
 
 /**
@@ -13,6 +14,7 @@ interface HeroSignupGlassProps {
 export function HeroSignupGlass({
   className,
   onSignupRequest,
+  signupLabel = "Reserve your spot — takes 10 seconds",
 }: HeroSignupGlassProps) {
   return (
     <div className={cn("relative w-full", className)}>
@@ -36,7 +38,7 @@ export function HeroSignupGlass({
 
         <div className="relative">
           <p className="mb-3 text-center text-[13px] font-medium text-white/75">
-            Reserve your spot — takes 10 seconds
+            {signupLabel}
           </p>
           <EmailCaptureForm
             variant="hero"

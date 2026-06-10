@@ -3,7 +3,13 @@ import { SubscriberCount } from "./subscriber-count";
 import { Reveal } from "./reveal";
 import { TrustStrip } from "./trust-strip";
 
-export function FinalCta() {
+interface FinalCtaProps {
+  audience?: "buyer" | "vendor";
+}
+
+export function FinalCta({ audience = "buyer" }: FinalCtaProps) {
+  const isVendor = audience === "vendor";
+
   return (
     <section className="bg-bg-white py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
@@ -38,11 +44,12 @@ export function FinalCta() {
 
             <div className="relative mx-auto max-w-2xl text-center">
               <h2 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-white sm:text-5xl">
-                Be first through the door.
+                {isVendor ? "Ready to sell on Ziora?" : "Be first through the door."}
               </h2>
               <p className="mx-auto mt-4 max-w-md text-base text-white/85 sm:text-lg">
-                Join the waitlist today and get early access when Ziora opens in
-                your wave.
+                {isVendor
+                  ? "Join the vendor waitlist today and be first in line when applications open in your wave."
+                  : "Join the waitlist today and get early access when Ziora opens in your wave."}
               </p>
 
               {/* iOS-style frosted glass panel for final CTA */}
@@ -67,9 +74,17 @@ export function FinalCta() {
 
                   <div className="relative">
                     <p className="mb-3 text-center text-[13px] font-medium text-white/75">
-                      Reserve your spot — takes 10 seconds
+                      {isVendor
+                        ? "Join the vendor waitlist — takes 10 seconds"
+                        : "Reserve your spot — takes 10 seconds"}
                     </p>
-                    <EmailCaptureForm variant="hero" pill glass tone="light" />
+                    <EmailCaptureForm
+                      variant="hero"
+                      pill
+                      glass
+                      tone="light"
+                      presetRole={audience}
+                    />
                   </div>
                 </div>
               </div>

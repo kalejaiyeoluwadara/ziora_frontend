@@ -25,6 +25,8 @@ interface EmailCaptureFormProps {
   tone?: Tone;
   /** When set, parent owns the signup modal (e.g. hero). */
   onSignupRequest?: (email: string) => void;
+  /** Pre-select buyer or vendor role in the signup modal. */
+  presetRole?: "buyer" | "vendor";
 }
 
 const ROLE_OPTIONS: { value: "buyer" | "vendor" | "both"; label: string }[] = [
@@ -41,6 +43,7 @@ export function EmailCaptureForm({
   glass = false,
   tone = "dark",
   onSignupRequest,
+  presetRole,
 }: EmailCaptureFormProps) {
   const [serverError, setServerError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -228,6 +231,7 @@ export function EmailCaptureForm({
           isOpen={showModal}
           onClose={() => setShowModal(false)}
           email={submittedEmail}
+          presetRole={presetRole}
         />
       )}
     </>

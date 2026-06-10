@@ -2,10 +2,15 @@
 
 import * as Accordion from "@radix-ui/react-accordion";
 import { ChevronDown } from "@/components/icons";
-import { FAQ_ITEMS } from "@/lib/waitlist/content";
+import type { FaqItem } from "@/lib/waitlist/content";
+import { BUYER_FAQ_ITEMS } from "@/lib/waitlist/content";
 import { Reveal } from "./reveal";
 
-export function FaqAccordion() {
+interface FaqAccordionProps {
+  items?: FaqItem[];
+}
+
+export function FaqAccordion({ items = BUYER_FAQ_ITEMS }: FaqAccordionProps) {
   return (
     <section className="bg-bg-section py-16 sm:py-24">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
@@ -40,7 +45,7 @@ export function FaqAccordion() {
                 collapsible
                 className="space-y-4"
               >
-                {FAQ_ITEMS.map((item, i) => (
+                {items.map((item, i) => (
                   <Accordion.Item
                     key={i}
                     value={`item-${i}`}

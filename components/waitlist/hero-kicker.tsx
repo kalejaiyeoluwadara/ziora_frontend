@@ -1,10 +1,11 @@
 /**
  * Early-access admission strip — ticket tear, not another pulsing pill badge.
  */
-export function HeroKicker() {
+export function HeroKicker({ audience = "buyer" }: { audience?: "buyer" | "vendor" }) {
+  const isVendor = audience === "vendor";
+
   return (
     <div className="relative inline-flex max-w-full items-stretch">
-      {/* Ticket notches */}
       <span
         aria-hidden
         className="absolute -left-1.5 top-1/2 z-10 h-3 w-3 -translate-y-1/2 rounded-full bg-[#1450E5]"
@@ -18,10 +19,12 @@ export function HeroKicker() {
         <div className="flex items-center px-4 py-2.5 sm:px-5">
           <p className="text-left text-[13px] leading-snug text-white/90 sm:text-[14px]">
             <span className="font-display font-semibold text-white">
-              No listings yet.
+              {isVendor ? "Vendor cohort forming." : "No listings yet."}
             </span>{" "}
             <span className="text-white/75">
-              We&apos;re vetting sellers in Lagos first.
+              {isVendor
+                ? "We're onboarding verified sellers in Lagos first."
+                : "We're vetting sellers in Lagos first."}
             </span>
           </p>
         </div>
@@ -35,7 +38,7 @@ export function HeroKicker() {
 
         <div className="flex shrink-0 flex-col justify-center px-4 py-2 text-left sm:px-5">
           <span className="text-[10px] font-medium tracking-[0.14em] text-white/50">
-            EARLY ACCESS
+            {isVendor ? "VENDOR ACCESS" : "EARLY ACCESS"}
           </span>
           <span className="mt-0.5 font-display text-[13px] font-semibold tabular-nums text-white sm:text-[14px]">
             Wave 1 · Q3 &apos;26

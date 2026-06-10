@@ -36,6 +36,9 @@ export function SiteFooter() {
           </div>
 
           <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-text-secondary">
+            <Link href="/vendor" className="hover:text-text-primary">
+              Sell on Ziora
+            </Link>
             <Link href="/privacy" className="hover:text-text-primary">
               Privacy
             </Link>

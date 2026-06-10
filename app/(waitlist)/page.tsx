@@ -1,4 +1,4 @@
-import { AudienceCards } from "@/components/waitlist/audience-cards";
+import { BuyerBenefits } from "@/components/waitlist/buyer-benefits";
 import { FaqAccordion } from "@/components/waitlist/faq-accordion";
 import { FinalCta } from "@/components/waitlist/final-cta";
 import { HowItWorks } from "@/components/waitlist/how-it-works";
@@ -20,7 +20,7 @@ export default function WaitlistLandingPage() {
         <div id="hero-sentinel" aria-hidden="true" className="h-px w-full" />
         <TrustBento />
         <HowItWorks />
-        <AudienceCards />
+        <BuyerBenefits />
         <SocialProof />
         <FaqAccordion />
         <FinalCta />

@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { ZioraLogo } from "@/components/icons";
 import { HeroKicker } from "./hero-kicker";
 import { HeroSignupGlass } from "./hero-signup-glass";
 import { HeroSocialProof } from "./hero-social-proof";
 import { HeroPreview } from "./hero-preview";
 import { SignupModal } from "./signup-modal";
 import { TrustStrip } from "./trust-strip";
+import { WaitlistNav } from "./waitlist-nav";
 
 const heroStagger = {
   hidden: { opacity: 0 },
@@ -27,10 +27,15 @@ const heroItem = {
   },
 };
 
-export function WaitlistHero() {
+interface WaitlistHeroProps {
+  audience?: "buyer" | "vendor";
+}
+
+export function WaitlistHero({ audience = "buyer" }: WaitlistHeroProps) {
   const reduce = !!useReducedMotion();
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [signupEmail, setSignupEmail] = useState("");
+  const isVendor = audience === "vendor";
 
   const handleSignupRequest = (email: string) => {
     setSignupEmail(email);
@@ -79,13 +84,7 @@ export function WaitlistHero() {
           })}
           className="flex items-center justify-between"
         >
-          <ZioraLogo className="h-7 text-white" />
-          <a
-            href="/leaderboard"
-            className="rounded-full px-3 py-1.5 text-[13px] font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            Leaderboard
-          </a>
+          <WaitlistNav audience={audience} />
         </MotionBlock>
 
         <MotionBlock
@@ -97,20 +96,30 @@ export function WaitlistHero() {
           className="mx-auto flex max-w-2xl flex-col items-center pt-12 text-center sm:pt-16"
         >
           <MotionBlock {...(!reduce && { variants: heroItem })}>
-            <HeroKicker />
+            <HeroKicker audience={audience} />
           </MotionBlock>
 
           <MotionBlock {...(!reduce && { variants: heroItem })}>
             <h1 className="mt-6 font-display text-[34px] font-bold leading-[1.05] tracking-[-0.02em] text-white sm:text-[52px] lg:text-[60px]">
-              Shop verified sellers.
-              <br className="hidden sm:block" /> Pay securely. Get it delivered.
+              {isVendor ? (
+                <>
+                  Sell to ready buyers.
+                  <br className="hidden sm:block" /> Get paid reliably. Grow your brand.
+                </>
+              ) : (
+                <>
+                  Shop verified sellers.
+                  <br className="hidden sm:block" /> Pay securely. Get it delivered.
+                </>
+              )}
             </h1>
           </MotionBlock>
 
           <MotionBlock {...(!reduce && { variants: heroItem })}>
             <p className="mt-5 max-w-lg text-lg leading-7 text-white/85">
-              The marketplace Lagos buyers can actually trust. Join the waitlist
-              for early access before a single product is listed.
+              {isVendor
+                ? "Join the vendor waitlist for early access to Ziora's trust-first marketplace — simple storefront, secure payouts, Lagos-first logistics."
+                : "The marketplace Lagos buyers can actually trust. Join the waitlist for early access before a single product is listed."}
             </p>
           </MotionBlock>
 
@@ -118,7 +127,14 @@ export function WaitlistHero() {
             {...(!reduce && { variants: heroItem })}
             className="mt-8 w-full max-w-[540px]"
           >
-            <HeroSignupGlass onSignupRequest={handleSignupRequest} />
+            <HeroSignupGlass
+              onSignupRequest={handleSignupRequest}
+              signupLabel={
+                isVendor
+                  ? "Join the vendor waitlist — takes 10 seconds"
+                  : "Reserve your spot — takes 10 seconds"
+              }
+            />
           </MotionBlock>
 
             <HeroSocialProof className="mt-6" />
@@ -148,6 +164,7 @@ export function WaitlistHero() {
         isOpen={showSignupModal}
         onClose={() => setShowSignupModal(false)}
         email={signupEmail}
+        presetRole={audience}
       />
     </section>
   );
