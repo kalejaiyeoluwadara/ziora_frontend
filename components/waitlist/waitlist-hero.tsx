@@ -75,7 +75,7 @@ export function WaitlistHero() {
         </div>
 
         {/* Marketplace preview peeking from the bottom */}
-        <div className="mx-auto mt-14 max-h-[300px] max-w-4xl overflow-hidden sm:max-h-[380px]">
+        <div className="mx-auto mt-14 max-h-[360px] max-w-4xl overflow-hidden sm:max-h-[440px]">
           <HeroPreview />
         </div>
       </div>
