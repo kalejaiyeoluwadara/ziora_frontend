@@ -18,7 +18,10 @@ export function ReferralRedirect({ code }: ReferralRedirectProps) {
 
   useEffect(() => {
     if (code) saveReferralCode(code);
-    const timer = setTimeout(() => router.replace("/"), 800);
+    const timer = setTimeout(
+      () => router.replace(`/?ref=${encodeURIComponent(code)}`),
+      800
+    );
     return () => clearTimeout(timer);
   }, [code, router]);
 

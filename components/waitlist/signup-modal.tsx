@@ -90,7 +90,11 @@ export function SignupModal({ isOpen, onClose, email, presetRole }: SignupModalP
     setError(null);
 
     try {
-      const refCode = readReferralCode() || undefined;
+      let refCode = readReferralCode() || undefined;
+      if (!refCode && typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        refCode = params.get("ref") || undefined;
+      }
       const res = await subscribeToWaitlist({
         email: email.trim().toLowerCase(),
         roleInterest: selectedRole,
