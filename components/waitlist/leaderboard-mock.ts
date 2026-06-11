@@ -17,15 +17,6 @@ export const getMockRank = (count: number): number => {
   return 1420;
 };
 
-// Generate consistent Nigerian names for users in the neighborhood view
-export const getMockNameForRank = (rank: number): string => {
-  const firstNames = ["Opeoluwa", "Kelechi", "Babajide", "Ezenwa", "Folake", "Adebimpe", "Obinna", "Halima", "Zainab", "Chinedum"];
-  const lastInitials = ["A.", "O.", "E.", "U.", "L.", "S.", "K.", "M.", "B.", "I."];
-  const nameIndex = rank % firstNames.length;
-  const initialIndex = (rank * 3) % lastInitials.length;
-  return `${firstNames[nameIndex]} ${lastInitials[initialIndex]}`;
-};
-
 // Milestones for access waves
 export const milestones = [
   { referrals: 1, label: "Rank Boost", desc: "Move up ~100 spots" },

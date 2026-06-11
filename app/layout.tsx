@@ -21,9 +21,9 @@ const siteUrl =
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Ziora — Shop verified sellers in Lagos | Join the waitlist",
+  title: "Ziora — Shop verified sellers | Join the waitlist",
   description:
-    "Join the Ziora waitlist for early access to Nigeria's trusted multi-vendor marketplace. Secure Paystack payments. Verified vendors. Lagos-first delivery.",
+    "Join the Ziora waitlist for early access to Nigeria's trusted multi-vendor marketplace. Secure Paystack payments. Verified vendors.",
   openGraph: {
     title: "I'm on the Ziora waitlist",
     description: "Verified sellers. Secure checkout. Join early access.",

@@ -14,7 +14,6 @@ import {
   defaultMockEntries,
   weeklyMockEntries,
   getMockRank,
-  getMockNameForRank,
 } from "./leaderboard-mock";
 
 export function LeaderboardView() {
@@ -57,12 +56,12 @@ export function LeaderboardView() {
     return [
       {
         rank: userRank - 2,
-        displayName: getMockNameForRank(userRank - 2),
+        displayName: "Waitlist Member",
         referralCount: userCount + 2,
       },
       {
         rank: userRank - 1,
-        displayName: getMockNameForRank(userRank - 1),
+        displayName: "Waitlist Member",
         referralCount: userCount + 1,
       },
       {
@@ -73,12 +72,12 @@ export function LeaderboardView() {
       },
       {
         rank: userRank + 1,
-        displayName: getMockNameForRank(userRank + 1),
+        displayName: "Waitlist Member",
         referralCount: Math.max(0, userCount - 1),
       },
       {
         rank: userRank + 2,
-        displayName: getMockNameForRank(userRank + 2),
+        displayName: "Waitlist Member",
         referralCount: Math.max(0, userCount - 2),
       },
     ];
