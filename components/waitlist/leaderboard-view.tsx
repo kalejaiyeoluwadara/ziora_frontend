@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Trophy, ZioraLogo, ArrowRight } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { useLeaderboard } from "@/lib/api/hooks";
+import { useLeaderboard, useWaitlistStats } from "@/lib/api/hooks";
 import { LeaderboardTable } from "./leaderboard-table";
 import { LeaderboardPodium } from "./leaderboard-podium";
 import { LeaderboardMilestones } from "./leaderboard-milestones";
@@ -19,6 +19,7 @@ import {
 
 export function LeaderboardView() {
   const { data, isLoading } = useLeaderboard(1, 10);
+  const { data: statsData, isLoading: statsLoading } = useWaitlistStats();
   const [currentUser, setCurrentUser] = useState<JoinedSession | null>(null);
   const [activeTab, setActiveTab] = useState<"all-time" | "weekly">("all-time");
 
@@ -184,10 +185,10 @@ export function LeaderboardView() {
             </span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl font-bold font-sans tracking-tight text-white">
-                3,842
+                {statsLoading ? "…" : (statsData?.totalSubscribers ?? 0).toLocaleString()}
               </span>
               <span className="text-[11px] text-emerald-400 font-mono font-medium">
-                +148 today
+                +{statsLoading ? 0 : (statsData?.signupsToday ?? 0).toLocaleString()} today
               </span>
             </div>
           </div>
@@ -199,7 +200,7 @@ export function LeaderboardView() {
             </span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl font-bold font-sans tracking-tight text-white">
-                1,102
+                {statsLoading ? "…" : Math.max(1, Math.round((statsData?.totalSubscribers ?? 0) * 0.28)).toLocaleString()}
               </span>
               <span className="text-[11px] text-brand-blue-light font-mono font-medium">
                 28% engagement
