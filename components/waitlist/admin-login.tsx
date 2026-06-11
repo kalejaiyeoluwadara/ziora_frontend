@@ -5,8 +5,10 @@ import Link from "next/link";
 import { ZioraLogo, Spinner, ArrowRight, Eye, EyeOff } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 
+import { adminLogin } from "@/lib/api/ApClients";
+
 interface AdminLoginProps {
-  onLoginSuccess: () => void;
+  onLoginSuccess: (token: string) => void;
 }
 
 export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
@@ -27,18 +29,18 @@ export function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
 
     setIsLoading(true);
 
-    // Network simulation for premium feel
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    if (
-      email.trim().toLowerCase() === "admin@ziora.app" &&
-      password === "ziora-launch-2026"
-    ) {
+    try {
+      const res = await adminLogin({
+        email: email.trim(),
+        password: password,
+      });
       setIsLoading(false);
-      onLoginSuccess();
-    } else {
+      onLoginSuccess(res.token);
+    } catch (err: unknown) {
       setIsLoading(false);
-      setError("Invalid email or password. Please try again.");
+      setError(
+        err instanceof Error ? err.message : "Invalid email or password. Please try again."
+      );
     }
   };
 

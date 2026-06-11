@@ -9,7 +9,8 @@ export default function AdminPage() {
 
   useEffect(() => {
     const auth = sessionStorage.getItem("ziora_admin_auth");
-    setIsAuthenticated(auth === "true");
+    const token = sessionStorage.getItem("ziora_admin_token");
+    setIsAuthenticated(auth === "true" && !!token);
   }, []);
 
   if (isAuthenticated === null) {
@@ -20,13 +21,15 @@ export default function AdminPage() {
     );
   }
 
-  const handleLogin = () => {
+  const handleLogin = (token: string) => {
     sessionStorage.setItem("ziora_admin_auth", "true");
+    sessionStorage.setItem("ziora_admin_token", token);
     setIsAuthenticated(true);
   };
 
   const handleLogout = () => {
     sessionStorage.removeItem("ziora_admin_auth");
+    sessionStorage.removeItem("ziora_admin_token");
     setIsAuthenticated(false);
   };
 

@@ -69,3 +69,75 @@ export const API_ERROR_CODES = {
   RATE_LIMITED: "RATE_LIMITED",
   INVALID_INPUT: "INVALID_INPUT",
 } as const;
+
+export interface AdminLoginPayload {
+  email: string;
+  password: string;
+}
+
+export interface AdminLoginResult {
+  token: string;
+}
+
+export interface AdminSubscriber {
+  _id: string;
+  email: string;
+  firstName?: string;
+  roleInterest: RoleInterest;
+  status: SubscriberStatus;
+  source?: string;
+  signupIp?: string;
+  position: number;
+  referralCode: string;
+  referredBy?: string | { _id: string; email: string };
+  referralCount: number;
+  rank?: number;
+  unsubscribeToken: string;
+  invitedAt?: string;
+  convertedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaginatedSubscribers {
+  subscribers: AdminSubscriber[];
+  total: number;
+  page: number;
+  pages: number;
+}
+
+export interface AdminOverviewMetrics {
+  totalSubscribers: number;
+  signupsToday: number;
+  signups7d: number;
+  signups30d: number;
+  roleBreakdown: {
+    buyer: number;
+    vendor: number;
+    both: number;
+  };
+  statusBreakdown: {
+    active: number;
+    unsubscribed: number;
+    invited: number;
+    converted: number;
+  };
+  averageReferrals: number;
+  topReferrers: {
+    email: string;
+    firstName?: string;
+    referralCount: number;
+    rank?: number;
+  }[];
+}
+
+export interface BroadcastLogEntry {
+  _id: string;
+  subject: string;
+  message: string;
+  sentAt: string;
+  recipientCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+

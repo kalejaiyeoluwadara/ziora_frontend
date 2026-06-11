@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getLeaderboard, getWaitlistStats } from "./waitlist";
+import { getLeaderboard, getWaitlistStats } from "./ApClients";
 
 export function useWaitlistStats() {
   return useQuery({

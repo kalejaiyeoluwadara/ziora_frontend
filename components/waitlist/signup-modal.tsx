@@ -16,10 +16,10 @@ import {
   Spinner,
 } from "@/components/icons";
 import { useIsMobile } from "@/lib/hooks/use-is-mobile";
-import { saveJoinedSession, clearReferralCode } from "@/lib/waitlist/session";
-import { appendExistingSessionToAdmin } from "@/lib/waitlist/admin-store";
+import { saveJoinedSession, clearReferralCode, readReferralCode } from "@/lib/waitlist/session";
 import { referralDisplayUrl, referralUrl } from "@/lib/waitlist/share";
 import { cn } from "@/lib/utils";
+import { subscribeToWaitlist } from "@/lib/api/ApClients";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -72,56 +72,57 @@ export function SignupModal({ isOpen, onClose, email, presetRole }: SignupModalP
   const [copied, setCopied] = useState(false);
   const [mockPosition, setMockPosition] = useState(0);
   const [mockRefCode, setMockRefCode] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  // Generate mock waitlist data once on mount / open
   useEffect(() => {
     if (isOpen) {
       setStep("role");
       setSelectedRole(presetRole ?? null);
       setIsSubmitting(false);
       setCopied(false);
-      
-      // Random mock values for high-fidelity experience
-      setMockPosition(Math.floor(Math.random() * 350) + 1480);
-      const randHex = Math.random().toString(36).substring(2, 7).toUpperCase();
-      setMockRefCode(`ZR${randHex}`);
+      setError(null);
     }
   }, [isOpen, presetRole]);
 
   const handleConfirmRole = async () => {
     if (!selectedRole) return;
     setIsSubmitting(true);
+    setError(null);
 
-    // Simulate network delay for premium feel
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    try {
+      const refCode = readReferralCode() || undefined;
+      const res = await subscribeToWaitlist({
+        email: email.trim().toLowerCase(),
+        roleInterest: selectedRole,
+        ref: refCode,
+      });
 
-    // Save session locally to simulate a real registration
-    saveJoinedSession({
-      email: email.trim().toLowerCase(),
-      position: mockPosition,
-      referralCode: mockRefCode,
-      rank: mockPosition,
-      referralCount: 0,
-    });
-    
-    // Also save to global admin store so they show up in the admin dashboard!
-    appendExistingSessionToAdmin({
-      email: email.trim().toLowerCase(),
-      position: mockPosition,
-      referralCode: mockRefCode,
-      firstName: email.trim().split("@")[0], // Fallback name
-      roleInterest: selectedRole === "buyer" ? "buyer" : "vendor",
-    });
+      // Save session locally to confirm registration
+      saveJoinedSession({
+        email: email.trim().toLowerCase(),
+        position: res.position,
+        referralCode: res.referralCode,
+        rank: res.position,
+        referralCount: 0,
+      });
 
-    clearReferralCode();
+      setMockPosition(res.position);
+      setMockRefCode(res.referralCode);
+      clearReferralCode();
 
-    // Fire event to update subscriber numbers or trigger other UI elements
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("waitlist_signup"));
+      // Fire event to update subscriber numbers or trigger other UI elements
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("waitlist_signup"));
+      }
+
+      setStep("success");
+    } catch (err: any) {
+      setError(
+        err instanceof Error ? err.message : "Something went wrong. Please try again shortly.",
+      );
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
-    setStep("success");
   };
 
   const referralLink = mockRefCode ? referralUrl(mockRefCode) : "";
@@ -416,6 +417,12 @@ export function SignupModal({ isOpen, onClose, email, presetRole }: SignupModalP
                             </div>
                           </motion.button>
                         </motion.div>
+                        )}
+
+                        {error && (
+                          <div aria-live="polite" className="mt-4 w-full rounded-xl bg-red-500/10 border border-red-500/20 px-3 py-2 text-xs font-medium text-red-600 text-center">
+                            {error}
+                          </div>
                         )}
 
                         {/* Submit Action */}
