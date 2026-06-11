@@ -28,7 +28,7 @@ export function LeaderboardPodium({ entries }: LeaderboardPodiumProps) {
             {rank2.isCurrentUser ? "You" : rank2.displayName}
           </h3>
           <span className="text-[10px] md:text-xs text-slate-500 uppercase font-mono mt-0.5 block">
-            {rank2.referralCount} invites
+            {rank2.referralCount} {rank2.referralCount === 1 ? "invite" : "invites"}
           </span>
         </div>
         <span className="hidden md:inline-block rounded-full bg-slate-900/60 border border-slate-800 px-2.5 py-0.5 text-[9px] font-semibold tracking-wider text-slate-400 uppercase">
@@ -52,7 +52,7 @@ export function LeaderboardPodium({ entries }: LeaderboardPodiumProps) {
             {rank1.isCurrentUser ? "You" : rank1.displayName}
           </h3>
           <span className="text-xs md:text-sm text-[#FF8A00] uppercase font-mono font-bold mt-0.5 block">
-            {rank1.referralCount} invites
+            {rank1.referralCount} {rank1.referralCount === 1 ? "invite" : "invites"}
           </span>
         </div>
         <span className="rounded-full bg-[#FF8A00]/10 border border-[#FF8A00]/45 px-2.5 py-0.5 text-[9px] font-bold tracking-wider text-[#FF8A00] uppercase">
@@ -75,7 +75,7 @@ export function LeaderboardPodium({ entries }: LeaderboardPodiumProps) {
             {rank3.isCurrentUser ? "You" : rank3.displayName}
           </h3>
           <span className="text-[10px] md:text-xs text-slate-500 uppercase font-mono mt-0.5 block">
-            {rank3.referralCount} invites
+            {rank3.referralCount} {rank3.referralCount === 1 ? "invite" : "invites"}
           </span>
         </div>
         <span className="hidden md:inline-block rounded-full bg-slate-900/60 border border-slate-800 px-2.5 py-0.5 text-[9px] font-semibold tracking-wider text-slate-400 uppercase">

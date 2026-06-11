@@ -2,32 +2,10 @@ import type { LeaderboardEntry } from "@/lib/api/types";
 
 // Base mock database representing active, verified waitlist referrers in Lagos.
 // This ensures the leaderboard looks alive, populated and extremely polished.
-export const defaultMockEntries: LeaderboardEntry[] = [
-  { rank: 1, displayName: "Oluwaseun A.", referralCount: 84 },
-  { rank: 2, displayName: "Chinedu E.", referralCount: 62 },
-  { rank: 3, displayName: "Fatima Y.", referralCount: 51 },
-  { rank: 4, displayName: "Damilola O.", referralCount: 38 },
-  { rank: 5, displayName: "Ngozi A.", referralCount: 29 },
-  { rank: 6, displayName: "Adebayo S.", referralCount: 22 },
-  { rank: 7, displayName: "Chioma N.", referralCount: 17 },
-  { rank: 8, displayName: "Emeka K.", referralCount: 14 },
-  { rank: 9, displayName: "Funmi L.", referralCount: 11 },
-  { rank: 10, displayName: "Tunde O.", referralCount: 8 },
-];
+export const defaultMockEntries: LeaderboardEntry[] = [];
 
 // Weekly active mock data to give the UI a dynamic, responsive feeling.
-export const weeklyMockEntries: LeaderboardEntry[] = [
-  { rank: 1, displayName: "Chinedu E.", referralCount: 18 },
-  { rank: 2, displayName: "Oluwaseun A.", referralCount: 15 },
-  { rank: 3, displayName: "Adebayo S.", referralCount: 12 },
-  { rank: 4, displayName: "Ngozi A.", referralCount: 9 },
-  { rank: 5, displayName: "Fatima Y.", referralCount: 8 },
-  { rank: 6, displayName: "Damilola O.", referralCount: 6 },
-  { rank: 7, displayName: "Tunde O.", referralCount: 5 },
-  { rank: 8, displayName: "Chioma N.", referralCount: 4 },
-  { rank: 9, displayName: "Emeka K.", referralCount: 3 },
-  { rank: 10, displayName: "Funmi L.", referralCount: 2 },
-];
+export const weeklyMockEntries: LeaderboardEntry[] = [];
 
 // Estimate a mock rank based on referral count if not provided by backend
 export const getMockRank = (count: number): number => {
