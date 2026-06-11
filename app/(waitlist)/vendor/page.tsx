@@ -15,7 +15,7 @@ import { VENDOR_FAQ_ITEMS, VENDOR_HOW_IT_WORKS } from "@/lib/waitlist/content";
 export const metadata: Metadata = {
   title: "Sell on Ziora — Vendor waitlist | Ziora",
   description:
-    "Join the Ziora vendor waitlist for early access. Reach trust-first buyers, get secure Paystack payouts, and sell with Lagos-first logistics.",
+    "Join the Ziora vendor waitlist for early access. Reach trust-first buyers, get secure Paystack payouts",
   openGraph: {
     title: "Sell on Ziora — Join the vendor waitlist",
     description:

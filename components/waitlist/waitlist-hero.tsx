@@ -118,7 +118,7 @@ export function WaitlistHero({ audience = "buyer" }: WaitlistHeroProps) {
           <MotionBlock {...(!reduce && { variants: heroItem })}>
             <p className="mt-5 max-w-lg text-lg leading-7 text-white/85">
               {isVendor
-                ? "Join the vendor waitlist for early access to Ziora's trust-first marketplace — simple storefront, secure payouts, Lagos-first logistics."
+                ? "Join the vendor waitlist for early access to Ziora's trust-first marketplace — simple storefront, secure payouts"
                 : "The marketplace Lagos buyers can actually trust. Join the waitlist for early access before a single product is listed."}
             </p>
           </MotionBlock>
