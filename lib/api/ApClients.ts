@@ -4,6 +4,7 @@ import type {
   LeaderboardResult,
   SubscribePayload,
   SubscribeResult,
+  VerifyEmailResult,
   WaitlistStats,
   AdminLoginPayload,
   AdminLoginResult,
@@ -54,7 +55,7 @@ export function getLeaderboard(params?: { page?: number; limit?: number }) {
 export function verifyEmail(email: string) {
   const query = new URLSearchParams();
   query.set("email", email);
-  return apiRequest<{ exists: boolean }>(
+  return apiRequest<VerifyEmailResult>(
     `${API_ROUTES.WAITLIST.VERIFY}?${query.toString()}`,
     {
       method: "GET",

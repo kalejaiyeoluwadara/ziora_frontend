@@ -8,6 +8,7 @@ import {
   useReducedMotion,
 } from "motion/react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   ZioraLogo,
   XTwitter,
@@ -16,10 +17,16 @@ import {
   Spinner,
 } from "@/components/icons";
 import { useIsMobile } from "@/lib/hooks/use-is-mobile";
+import { WaitlistApiError } from "@/lib/api/client";
+import { API_ERROR_CODES } from "@/lib/api/types";
+import { subscribeToWaitlist } from "@/lib/api/ApClients";
+import {
+  joinedPathForEmail,
+  loadExistingSubscriberSession,
+} from "@/lib/waitlist/existing-subscriber";
 import { saveJoinedSession, clearReferralCode, readReferralCode } from "@/lib/waitlist/session";
 import { referralDisplayUrl, referralUrl } from "@/lib/waitlist/share";
 import { cn } from "@/lib/utils";
-import { subscribeToWaitlist } from "@/lib/api/ApClients";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -62,6 +69,7 @@ const cardItem = {
 };
 
 export function SignupModal({ isOpen, onClose, email, presetRole }: SignupModalProps) {
+  const router = useRouter();
   const reduce = !!useReducedMotion();
   const isMobile = useIsMobile();
   const isDrawer = isMobile && !reduce;
@@ -120,7 +128,23 @@ export function SignupModal({ isOpen, onClose, email, presetRole }: SignupModalP
       }
 
       setStep("success");
-    } catch (err: any) {
+    } catch (err: unknown) {
+      if (
+        err instanceof WaitlistApiError &&
+        err.code === API_ERROR_CODES.DUPLICATE_EMAIL
+      ) {
+        try {
+          const session = await loadExistingSubscriberSession(email);
+          if (session) {
+            onClose();
+            router.push(joinedPathForEmail(email));
+            return;
+          }
+        } catch {
+          /* fall through to generic error */
+        }
+      }
+
       setError(
         err instanceof Error ? err.message : "Something went wrong. Please try again shortly.",
       );

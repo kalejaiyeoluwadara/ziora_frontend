@@ -36,6 +36,17 @@ export interface SubscribeResult {
   referralCount?: number;
 }
 
+/** Public subscriber snapshot returned when verifying an existing email. */
+export interface VerifyEmailResult {
+  exists: boolean;
+  email?: string;
+  position?: number;
+  referralCode?: string;
+  rank?: number;
+  referralCount?: number;
+  firstName?: string;
+}
+
 export interface WaitlistStats {
   totalSubscribers: number;
   signupsToday: number;

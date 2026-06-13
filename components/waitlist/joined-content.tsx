@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   CheckCircle,
@@ -10,6 +11,7 @@ import {
 } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import type { JoinedSession } from "@/lib/api/types";
+import { loadExistingSubscriberSession } from "@/lib/waitlist/existing-subscriber";
 import { SOCIAL_LINKS } from "@/lib/waitlist/content";
 import { readJoinedSession } from "@/lib/waitlist/session";
 import { MilestoneProgress } from "./milestone-progress";
@@ -17,13 +19,46 @@ import { PositionReveal } from "./position-reveal";
 import { ReferralShareCard } from "./referral-share-card";
 
 export function JoinedContent() {
+  const searchParams = useSearchParams();
+  const emailParam = searchParams.get("email")?.trim().toLowerCase() ?? "";
   const [session, setSession] = useState<JoinedSession | null>(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    setSession(readJoinedSession());
-    setLoaded(true);
-  }, []);
+    let cancelled = false;
+
+    async function hydrateSession() {
+      const stored = readJoinedSession();
+      if (stored) {
+        if (!cancelled) {
+          setSession(stored);
+          setLoaded(true);
+        }
+        return;
+      }
+
+      if (emailParam) {
+        try {
+          const existing = await loadExistingSubscriberSession(emailParam);
+          if (!cancelled) {
+            setSession(existing);
+          }
+        } catch {
+          /* joined page falls back to empty state */
+        }
+      }
+
+      if (!cancelled) {
+        setLoaded(true);
+      }
+    }
+
+    void hydrateSession();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [emailParam]);
 
   // Direct visit with no signup in this session
   if (loaded && !session) {
