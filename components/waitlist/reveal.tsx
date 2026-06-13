@@ -9,7 +9,7 @@ interface RevealProps {
   className?: string;
 }
 
-/** Subtle scroll-in: opacity + 12px translateY, 500ms ease-out. */
+/** Scroll-in: spring physics, 28px translateY, snappy energetic feel. */
 export function Reveal({ children, delay = 0, className }: RevealProps) {
   const reduce = useReducedMotion();
 
@@ -20,10 +20,15 @@ export function Reveal({ children, delay = 0, className }: RevealProps) {
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, ease: "easeOut", delay }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{
+        type: "spring",
+        stiffness: 350,
+        damping: 28,
+        delay,
+      }}
     >
       {children}
     </motion.div>

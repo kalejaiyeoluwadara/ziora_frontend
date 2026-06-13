@@ -9,6 +9,7 @@ import { HeroPreview } from "./hero-preview";
 import { SignupModal } from "./signup-modal";
 import { TrustStrip } from "./trust-strip";
 import { WaitlistNav } from "./waitlist-nav";
+import { SparklesText } from "@/components/ui/sparkles-text";
 
 const heroStagger = {
   hidden: { opacity: 0 },
@@ -108,7 +109,12 @@ export function WaitlistHero({ audience = "buyer" }: WaitlistHeroProps) {
                 </>
               ) : (
                 <>
-                  Shop verified sellers.
+                  <SparklesText
+                    text="Shop verified sellers."
+                    colors={{ first: "#93C5FD", second: "#C4B5FD" }}
+                    sparklesCount={8}
+                    className="font-display text-[34px] font-bold leading-[1.05] tracking-[-0.02em] text-white sm:text-[52px] lg:text-[60px]"
+                  />
                   <br className="hidden sm:block" /> Pay securely. Get it delivered.
                 </>
               )}
